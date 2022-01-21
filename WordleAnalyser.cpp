@@ -13,13 +13,9 @@ WordleAnalyser::~WordleAnalyser()
 
 bool WordleAnalyser::Initialise()
 {
-	HANDLE wordListFileHandle = CreateFileW( WORD_LIST_FILENAME, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
-	if (wordListFileHandle == INVALID_HANDLE_VALUE)
-	{
-		return false;
-	}
+	m_wordList.ReadWords( WORD_LIST_FILENAME );
 
-	CloseHandle( wordListFileHandle );
+	DEBUG_MESSAGE( "Test %u %s\n", 15, "Melons" );
 
 	return true;
 }
