@@ -3,6 +3,9 @@
 #include <winerror.h>
 #include "Debug.h"
 
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

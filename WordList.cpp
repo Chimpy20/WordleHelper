@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "WordList.h"
+#include "Word.h"
 
-WordList::WordList():
-	m_wordListRaw( nullptr )
+WordList::WordList() :
+	m_wordListRaw( nullptr ),
+	m_wordListRawSize( 0 )
 {
 	m_heap = HeapCreate( 0, 0, 0 );
 }
@@ -37,6 +39,8 @@ UINT WordList::ReadWords( const WCHAR* wordListFileName )
 			ASSERT( bytesRead == fileSize.LowPart, "Wrong number of bytes read, read %u, expecting %u\n", bytesRead, fileSize.LowPart );
 			if( bytesRead == fileSize.LowPart )
 			{
+				m_wordListRawSize = bytesRead;
+				numWordsRead = ExtractWords();
 			}
 		}
 	}
@@ -44,4 +48,46 @@ UINT WordList::ReadWords( const WCHAR* wordListFileName )
 	CloseHandle( wordListFileHandle );
 
 	return numWordsRead;
+}
+
+UINT WordList::ExtractWords()
+{
+	CHAR currentWord[ MaxWordBufferSize ];
+
+	UINT currentWordListBufferPos = 0;
+	UINT offset = 0;
+	CHAR currentLetter = 0;
+
+	while( currentWordListBufferPos < m_wordListRawSize )
+	{
+		currentLetter = m_wordListRaw[ currentWordListBufferPos + offset ];
+
+		while( IsLetterAlpha( currentLetter ) &&
+			( offset < MaxWordBufferSize ) &&
+			( ( currentWordListBufferPos + offset ) < m_wordListRawSize ) )
+		{
+			currentWord[ offset ] = currentLetter;
+			++offset;
+			currentLetter = m_wordListRaw[ currentWordListBufferPos + offset ];
+		};
+
+		if( offset == Word::WordLength )
+		{
+			// Create word and add it to the word list
+		}
+
+		currentWordListBufferPos += offset + 1;
+		offset = 0;
+	};
+		
+	return 0;
+}
+
+bool WordList::IsLetterAlpha( const CHAR letter )
+{
+	if( ( letter >= 'a' && letter <= 'z' ) ||
+		( letter >= 'A' && letter <= 'Z' ) )
+		return true;
+
+	return false;
 }
