@@ -2,6 +2,9 @@
 
 #include "WordList.h"
 
+namespace wa
+{
+
 class WordleAnalyser
 {
 public:
@@ -13,5 +16,7 @@ public:
 private:
 	static const WCHAR* const WORD_LIST_FILENAME;
 
-	WordList m_wordList;
+	WordList*		m_wordList;
 };
+
+}

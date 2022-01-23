@@ -2,6 +2,9 @@
 #include "IO.h"
 #include "printf.h"
 
+namespace io
+{
+
 static const UINT MaxDebugMessageSize = 1024;
 
 //#pragma warning( push )
@@ -19,3 +22,5 @@ void OutputMessage( const CHAR* const message, ... )
 }
 
 //#pragma warning( pop )
+
+}

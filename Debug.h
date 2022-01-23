@@ -5,15 +5,15 @@
 #ifdef _DEBUG
 
 #define DEBUG_MESSAGE( message, ... ) \
-OutputMessage( message, __VA_ARGS__ )
+io::OutputMessage( message, __VA_ARGS__ )
 
 #define ASSERT(cond, msg, ...) \
 do \
 { \
 if( !( cond ) ) \
 { \
-OutputMessage( "Assert failure: %s at %s %u\n",  #cond, __FILE__, __LINE__ ); \
-OutputMessage( msg, __VA_ARGS__ ); \
+io::OutputMessage( "Assert failure: %s at %s %u\n",  #cond, __FILE__, __LINE__ ); \
+io::OutputMessage( msg, __VA_ARGS__ ); \
 DebugBreak(); \
 } \
 } while( 0 )

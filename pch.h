@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include <windows.h>
 #include <winerror.h>
+#include "Memory.h"
+#include "Containers.h"
+#include "IO.h"
 #include "Debug.h"
 
 #define _CRTDBG_MAP_ALLOC

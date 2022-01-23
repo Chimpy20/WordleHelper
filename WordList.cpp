@@ -2,21 +2,21 @@
 #include "WordList.h"
 #include "Word.h"
 
+namespace wa
+{
+
 WordList::WordList() :
 	m_wordListRaw( nullptr ),
 	m_wordListRawSize( 0 )
 {
-	m_heap = HeapCreate( 0, 0, 0 );
 }
 
 WordList::~WordList()
 {
 	if( m_wordListRaw != nullptr )
 	{
-		HeapFree( m_heap, 0, m_wordListRaw );
+		memory::Heap::Free( m_wordListRaw );
 	}
-
-	HeapDestroy( m_heap );
 }
 
 UINT WordList::ReadWords( const WCHAR* wordListFileName )
@@ -32,7 +32,7 @@ UINT WordList::ReadWords( const WCHAR* wordListFileName )
 	LARGE_INTEGER fileSize;
 	if( GetFileSizeEx( wordListFileHandle, &fileSize ) )
 	{
-		m_wordListRaw = (CHAR*)HeapAlloc( m_heap, 0, fileSize.QuadPart );
+		m_wordListRaw = (CHAR*)memory::Heap::Alloc( fileSize.QuadPart );
 		DWORD bytesRead = 0;
 		if( ReadFile( wordListFileHandle, m_wordListRaw, fileSize.LowPart, &bytesRead, nullptr ) )
 		{
@@ -52,6 +52,7 @@ UINT WordList::ReadWords( const WCHAR* wordListFileName )
 
 UINT WordList::ExtractWords()
 {
+	UINT numWords = 0;
 	CHAR currentWord[ MaxWordBufferSize ];
 
 	UINT currentWordListBufferPos = 0;
@@ -74,13 +75,16 @@ UINT WordList::ExtractWords()
 		if( offset == Word::WordLength )
 		{
 			// Create word and add it to the word list
+			Word word( currentWord );
+			m_wordList.Push( word );
+			++numWords;
 		}
 
 		currentWordListBufferPos += offset + 1;
 		offset = 0;
 	};
-		
-	return 0;
+
+	return numWords;
 }
 
 bool WordList::IsLetterAlpha( const CHAR letter )
@@ -90,4 +94,6 @@ bool WordList::IsLetterAlpha( const CHAR letter )
 		return true;
 
 	return false;
+}
+
 }
