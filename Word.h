@@ -12,7 +12,8 @@ public:
 	~Word();
 
 private:
-	CHAR		m_letters[ WordLength + 1 ];
+	static CHAR		MakeLower( CHAR letter );
+	CHAR			m_letters[ WordLength + 1 ];
 };
 
 }

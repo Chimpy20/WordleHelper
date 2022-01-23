@@ -6,7 +6,8 @@ namespace wa
 
 const WCHAR* const WordleAnalyser::WORD_LIST_FILENAME = L"wordlist.txt";
 
-WordleAnalyser::WordleAnalyser()
+WordleAnalyser::WordleAnalyser():
+	m_wordList( nullptr )
 {
 }
 
@@ -14,18 +15,31 @@ WordleAnalyser::~WordleAnalyser()
 {
 }
 
-bool WordleAnalyser::Initialise()
+UINT WordleAnalyser::Initialise()
 {
 	m_wordList = new WordList();
 	const UINT wordsRead = m_wordList->ReadWords( WORD_LIST_FILENAME );
 
-	io::OutputMessage( "Read %u words\n", wordsRead );
-
-	delete m_wordList;
-
 	DEBUG_MESSAGE( "Test %u %s\n", 15, "Melons" );
 
-	return true;
+	return wordsRead;
+}
+
+void WordleAnalyser::Shutdown()
+{
+	delete m_wordList;
+}
+
+void WordleAnalyser::GenerateStats()
+{
+	for( UINT letter = 0; letter < NumLetters; ++letter )
+	{
+		for( UINT wordLetterIndex = 0; wordLetterIndex < Word::WordLength; ++wordLetterIndex )
+		{
+			m_overallLetterCountsPerPosition[ letter ][ wordLetterIndex ] = 0;
+		}
+	}
+
 }
 
 }

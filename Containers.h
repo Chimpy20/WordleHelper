@@ -38,15 +38,15 @@ public:
 		}
 	}
 
-	void Push( T element );
+	void Push( T item );
 };
 
 template <class T>
-void List<T>::Push( T element )
+void List<T>::Push( T item )
 {
 	Element<T>* newElement = new Element<T>;
 	ASSERT( newElement != nullptr, "Unable to create element for list\n" );
-	newElement->m_data = element;
+	newElement->m_data = item;
 	newElement->m_next = m_first;
 	m_first = newElement;
 }
