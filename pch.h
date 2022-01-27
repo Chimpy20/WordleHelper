@@ -16,3 +16,5 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+#pragma warning( disable : 4100 )

@@ -76,7 +76,7 @@ UINT WordList::ExtractWords()
 		{
 			// Create word and add it to the word list
 			Word word( currentWord );
-			m_wordList.Push( word );
+			m_wordList.push_back( word );
 			++numWords;
 		}
 

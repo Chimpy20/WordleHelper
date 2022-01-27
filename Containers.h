@@ -6,49 +6,152 @@ namespace containers
 {
 
 template <class T>
-class Element
+class List;
+
+class Iterator;
+
+class Node
 {
+	friend class Iterator;
+	template<class T> friend class List;
+
 public:
-	Element()
+	Node():
+		m_next( this ),
+		m_prev( this )
 	{
-		m_next = nullptr;
 	}
-	~Element() {}
-	T				m_data;
-	Element*		m_next;
+	~Node()
+	{
+		unlink();
+	}
+
+protected:
+	Node*			m_next;
+	Node*			m_prev;
+
+	void push_back( Node* n )
+	{
+		n->m_next = this;
+		n->m_prev = m_prev;
+		m_prev->m_next = n;
+		m_prev = n;
+	}
+
+	void unlink()
+	{
+		Node* next = m_next, * prev = m_prev;
+		next->m_prev = prev;
+		prev->m_next = next;
+		m_next = this;
+		m_prev = this;
+	}
+};
+
+class Iterator
+{
+protected:
+	Node*			m_node;
+
+	Iterator( Node* node )
+		: m_node( node )
+	{}
+
+public:
+	Iterator& operator++()
+	{
+		m_node = m_node->m_next;
+		return *this;
+	}
+
+	bool operator==( Iterator other ) const { return m_node == other.m_node; }
+	bool operator!=( Iterator other ) const { return m_node != other.m_node; }
+
 };
 
 template <class T>
 class List
 {
 private:
-	Element<T>*		m_first;
+	class NodeT : public Node
+	{
+		friend class List<T>;
+		T			m_value;
+		NodeT( T t ) : m_value( t ){}
+	};
+
+	template<class U>
+	class IteratorT : public Iterator
+	{
+	private:
+		friend class List<T>;
+
+		NodeT* node() const
+		{
+			return static_cast<NodeT*>( m_node );
+		}
+
+	public:
+		IteratorT( Node* node ) : Iterator( node ){}
+		U& operator*() const
+		{
+			return node()->m_data;
+		}
+		U* operator->() const
+		{
+			return &node()->m_data;
+		}
+		operator IteratorT<U const>() const
+		{
+			return m_node;
+		}
+	};
+
+	Node			m_head;
+
 public:
+	using iterator = IteratorT<T>;
+	using const_iterator = IteratorT<T const>;
+
 	List()
 	{
-		m_first = nullptr;
 	}
+
 	~List()
 	{
-		while( m_first != nullptr )
-		{
-			Element<T>* nextElement = m_first->m_next;
-			delete m_first;
-			m_first = nextElement;
-		}
+		clear();
 	}
 
-	void Push( T item );
-};
+	bool empty() const
+	{
+		return m_head.m_next == &m_head;
+	}
 
-template <class T>
-void List<T>::Push( T item )
-{
-	Element<T>* newElement = new Element<T>;
-	ASSERT( newElement != nullptr, "Unable to create element for list\n" );
-	newElement->m_data = item;
-	newElement->m_next = m_first;
-	m_first = newElement;
-}
+	iterator begin()
+	{
+		return m_head.m_next;
+	}
+
+	iterator end()
+	{
+		return &m_head;
+	}
+
+	void push_back( T t )
+	{
+		m_head.push_back( new NodeT( t ) );
+	}
+
+	void erase( const_iterator i )
+	{
+		delete i.node();
+	}
+
+	void clear()
+	{
+		while( !empty() )
+			erase( begin() );
+	}
+};
 
 }
