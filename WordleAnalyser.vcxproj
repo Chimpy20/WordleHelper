@@ -91,6 +91,7 @@
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebugDLL</RuntimeLibrary>
       <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExceptionHandling>
       <FloatingPointExceptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</FloatingPointExceptions>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -115,6 +116,7 @@
       <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExceptionHandling>
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</BufferSecurityCheck>
       <FloatingPointExceptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</FloatingPointExceptions>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,6 +131,7 @@
   <ItemGroup>
     <ClInclude Include="Containers.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="FilterWord.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="pch.h" />
@@ -139,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Containers.cpp" />
+    <ClCompile Include="FilterWord.cpp" />
     <ClCompile Include="IO.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory.cpp" />

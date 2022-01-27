@@ -20,6 +20,9 @@ UINT WordleAnalyser::Initialise()
 	m_wordList = new WordList();
 	const UINT wordsRead = m_wordList->ReadWords( WORD_LIST_FILENAME );
 
+	WordList* const filteredWords = new WordList();
+	delete filteredWords;
+
 	DEBUG_MESSAGE( "Test %u %s\n", 15, "Melons" );
 
 	return wordsRead;

@@ -14,6 +14,7 @@ public:
 
 private:
 	static HANDLE	sm_heap;
+	static UINT64	sm_heapAllocationsTotal;
 };
 
 }
