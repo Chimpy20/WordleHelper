@@ -13,6 +13,8 @@ WordList::WordList() :
 
 WordList::~WordList()
 {
+	m_wordList.clear();
+
 	if( m_wordListRaw != nullptr )
 	{
 		memory::Heap::Free( m_wordListRaw );
@@ -21,6 +23,13 @@ WordList::~WordList()
 
 UINT WordList::ReadWords( const WCHAR* wordListFileName )
 {
+#ifdef _DEBUG
+	if( m_wordListRawSize != 0 )
+	{
+		io::OutputMessage( "Word list already has raw data, is it intended to read more?\n" );
+	}
+#endif
+
 	HANDLE wordListFileHandle = CreateFileW( wordListFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr );
 	if( wordListFileHandle == INVALID_HANDLE_VALUE )
 	{
@@ -94,6 +103,20 @@ bool WordList::IsLetterAlpha( const CHAR letter )
 		return true;
 
 	return false;
+}
+
+UINT WordList::DuplicateFrom( const WordList& other )
+{
+	const containers::List<Word>& sourceWordList = other.m_wordList;
+	containers::List<Word>::const_iterator itor = sourceWordList.begin();
+	while( itor != sourceWordList.end() )
+	{
+		const Word word = *itor;
+		m_wordList.push_back( word );
+		itor++;
+	}
+
+	return static_cast<UINT>( m_wordList.size() );
 }
 
 }

@@ -14,6 +14,8 @@ public:
 
 	UINT					ReadWords( const WCHAR* wordListFileName );
 
+	UINT					DuplicateFrom( const WordList& other );
+
 private:
 	static const UINT		MaxWordBufferSize = 16;
 
