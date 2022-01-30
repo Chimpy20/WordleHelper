@@ -8,9 +8,6 @@ namespace containers
 template <class T>
 class List;
 
-//class Iterator;
-//class ConstIterator;
-
 class NodeBase
 {
 public:
@@ -135,57 +132,6 @@ template <class T>
 class List
 {
 private:
-	/*class NodeT : public Node
-	{
-		friend class List<T>;
-		T			m_value;
-		NodeT( T t ) : m_value( t ){}
-	};
-
-	template<class U>
-	class IteratorT : public Iterator
-	{
-	private:
-		friend class List<T>;
-
-		NodeT* node() const
-		{
-			return static_cast<NodeT*>( m_node );
-		}
-
-		NodeT* node()
-		{
-			return static_cast<NodeT*>( m_node );
-		}
-
-	public:
-		IteratorT( Node* node ) : Iterator( node ){}
-		U& operator*()
-		{
-			return node()->m_value;
-		}
-		U& operator*() const
-		{
-			return node()->m_value;
-		}
-		U* operator->()
-		{
-			return &node()->m_value;
-		}
-		U* operator->() const
-		{
-			return &node()->m_value;
-		}
-		operator IteratorT<U const>()
-		{
-			return m_node;
-		}
-		operator IteratorT<U const>() const
-		{
-			return m_node;
-		}
-	};*/
-
 	Node<T>			m_head;
 	size_t			m_size;
 
@@ -234,11 +180,15 @@ public:
 		++m_size;
 	}
 
-	inline void erase( iterator i )
+	inline iterator erase( iterator i )
 	{
+		iterator next = i.m_node->m_next;
+		if( next == nullptr )
+			next = end();
 		delete i.m_node;
 		ASSERT( m_size > 0, "Trying to erase from a non-empty list\n" );
 		--m_size;
+		return next;
 	}
 
 	inline void clear()

@@ -9,7 +9,7 @@ Word::Word()
 	m_letters[ 0 ] = '\0';
 }
 
-Word::Word( CHAR* letters )
+Word::Word( CHAR letters[ WordLength ] )
 {
 	for( UINT letterIndex = 0; letterIndex < WordLength; ++letterIndex )
 	{
@@ -33,6 +33,12 @@ CHAR Word::MakeLower( CHAR letter )
 	}
 
 	return letter;
+}
+
+CHAR Word::GetLetterAtPosition( const UINT position ) const
+{
+	ASSERT( position < WordLength, "Letter position out of range\n" );
+	return m_letters[ position ];
 }
 
 }

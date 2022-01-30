@@ -119,4 +119,34 @@ UINT WordList::DuplicateFrom( const WordList& other )
 	return static_cast<UINT>( m_wordList.size() );
 }
 
+UINT WordList::Filter( const FilterWord& filterWord )
+{
+	containers::List<Word>::iterator itor = m_wordList.begin();
+	while( itor != m_wordList.end() )
+	{
+		Word word = *itor;
+		if( !filterWord.PotentialMatch( word ) )
+		{
+			itor = m_wordList.erase( itor );
+		}
+		else
+		{
+			itor++;
+		}
+	}
+
+	return static_cast<UINT>( m_wordList.size() );
+}
+
+void WordList::OutputWords()
+{
+	containers::List<Word>::const_iterator itor = m_wordList.begin();
+	while( itor != m_wordList.end() )
+	{
+		Word word = *itor;
+		io::OutputMessage( "\t%s\n", word.GetAsString() );
+		itor++;
+	}
+}
+
 }

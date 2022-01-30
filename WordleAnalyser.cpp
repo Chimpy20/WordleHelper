@@ -1,10 +1,47 @@
 #include "pch.h"
 #include "WordleAnalyser.h"
+#include "FilterWord.h"
 
 namespace wa
 {
 
 const WCHAR* const WordleAnalyser::WORD_LIST_FILENAME = L"wordlist.txt";
+
+const CHAR testFilterLetters1[ Word::WordLength ] =
+{
+	'r',
+	'a',
+	'i',
+	's',
+	'e'
+};
+
+const FilterLetterState testFilterLetterStates1[ Word::WordLength ] = 
+{
+	FilterLetterState::WrongPosition,
+	FilterLetterState::Incorrect,
+	FilterLetterState::Incorrect,
+	FilterLetterState::Incorrect,
+	FilterLetterState::Incorrect
+};
+
+const CHAR testFilterLetters2[ Word::WordLength ] =
+{
+	't',
+	'o',
+	'u',
+	'g',
+	'h'
+};
+
+const FilterLetterState testFilterLetterStates2[ Word::WordLength ] =
+{
+	FilterLetterState::Incorrect,
+	FilterLetterState::Incorrect,
+	FilterLetterState::Correct,
+	FilterLetterState::WrongPosition,
+	FilterLetterState::Incorrect
+};
 
 WordleAnalyser::WordleAnalyser():
 	m_wordList( nullptr )
@@ -22,11 +59,18 @@ UINT WordleAnalyser::Initialise()
 
 	WordList* const filteredWords = new WordList();
 	filteredWords->DuplicateFrom( *m_wordList );
+	UINT uNumFilteredWords = filteredWords->Filter( FilterWord( testFilterLetters1, testFilterLetterStates1 ) );
+	io::OutputMessage( "Filtered down to %u words\n", uNumFilteredWords );
+	uNumFilteredWords = filteredWords->Filter( FilterWord( testFilterLetters2, testFilterLetterStates2 ) );
+	io::OutputMessage( "Filtered down to %u words\n", uNumFilteredWords );
 
+	if( uNumFilteredWords <= 10 )
+	{
+		io::OutputMessage( "Filtered words are:\n" );
+		filteredWords->OutputWords();
+	}
 
 	delete filteredWords;
-
-	DEBUG_MESSAGE( "Test %u %s\n", 15, "Melons" );
 
 	return wordsRead;
 }

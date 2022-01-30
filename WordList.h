@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Containers.h"
-#include "Word.h"
+#include "FilterWord.h"
 
 namespace wa
 {
@@ -15,6 +15,10 @@ public:
 	UINT					ReadWords( const WCHAR* wordListFileName );
 
 	UINT					DuplicateFrom( const WordList& other );
+
+	UINT					Filter( const FilterWord& filterWord );
+
+	void					OutputWords();
 
 private:
 	static const UINT		MaxWordBufferSize = 16;
