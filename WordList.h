@@ -2,9 +2,12 @@
 
 #include "Containers.h"
 #include "FilterWord.h"
+#include "Analysis.h"
 
 namespace wa
 {
+
+class Analysis;
 
 class WordList
 {
@@ -14,9 +17,16 @@ public:
 
 	UINT					ReadWords( const WCHAR* wordListFileName );
 
+	const containers::List<Word>& GetWordList() const
+	{
+		return m_wordList;
+	}
+
 	UINT					DuplicateFrom( const WordList& other );
 
 	UINT					Filter( const FilterWord& filterWord );
+
+	void					Analyse();
 
 	void					OutputWords();
 
@@ -30,6 +40,7 @@ private:
 	UINT					m_wordListRawSize;
 
 	containers::List<Word>	m_wordList;
+	Analysis				m_analysis;
 };
 
 }

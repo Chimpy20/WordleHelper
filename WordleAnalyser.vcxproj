@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Analysis.h" />
     <ClInclude Include="Containers.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="FilterWord.h" />
@@ -136,6 +137,7 @@
     <ClInclude Include="WordList.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Analysis.cpp" />
     <ClCompile Include="Containers.cpp" />
     <ClCompile Include="FilterWord.cpp" />
     <ClCompile Include="IO.cpp" />

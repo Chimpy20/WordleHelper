@@ -14,12 +14,13 @@ int main()
 
 	wa::WordleAnalyser wordleAnalyser;
 	const UINT wordsRead = wordleAnalyser.Initialise();
-	wordleAnalyser.GenerateStats();
 
 	QueryPerformanceCounter( &endTime );
 	const float readDuration = static_cast<float>( endTime.QuadPart - startTime.QuadPart ) * 1000.0f / static_cast<float>( frequency.QuadPart );
 
 	io::OutputMessage( "Read %u words in %.3fms\n", wordsRead, readDuration );
+
+	wordleAnalyser.Run();
 
 	wordleAnalyser.Shutdown();
 	memory::Heap::Destroy();

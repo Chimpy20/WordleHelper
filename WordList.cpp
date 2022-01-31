@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "WordList.h"
 #include "Word.h"
+#include "Analysis.h"
 
 namespace wa
 {
 
 WordList::WordList() :
 	m_wordListRaw( nullptr ),
-	m_wordListRawSize( 0 )
+	m_wordListRawSize( 0 ),
+	m_analysis(*this)
 {
 }
 
@@ -147,6 +149,11 @@ void WordList::OutputWords()
 		io::OutputMessage( "\t%s\n", word.GetAsString() );
 		itor++;
 	}
+}
+
+void WordList::Analyse()
+{
+	m_analysis.Analyse();
 }
 
 }
