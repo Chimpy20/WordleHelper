@@ -98,6 +98,10 @@ UINT WordList::ExtractWords()
 	return numWords;
 }
 
+void WordList::Randomise()
+{
+}
+
 bool WordList::IsLetterAlpha( const CHAR letter )
 {
 	if( ( letter >= 'a' && letter <= 'z' ) ||

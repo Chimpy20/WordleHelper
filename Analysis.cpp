@@ -12,6 +12,10 @@ Analysis::Analysis( WordList& wordList ):
 
 void Analysis::Analyse()
 {
+	LARGE_INTEGER frequency, startTime, endTime;
+	QueryPerformanceFrequency( &frequency );
+	QueryPerformanceCounter( &startTime );
+
 	const UINT numEntries = NumLetters * Word::WordLength;
 	UINT* entriesBase = &( m_overallLetterCountsPerPosition[ 0 ][ 0 ] );
 	for( UINT entry = 0; entry < numEntries; ++entry )
@@ -31,6 +35,45 @@ void Analysis::Analyse()
 		}
 		itor++;
 	}
+
+	for( UINT letterWordIndex = 0; letterWordIndex < Word::WordLength; ++letterWordIndex)
+	{
+		for( UINT letterIndex = 0; letterIndex < NumLetters; ++letterIndex )
+		{
+			m_letterRankingsPerPosition[ letterIndex ][ letterWordIndex ] = FirstLetterOffset + letterIndex;
+		}
+
+		// Sort the letters
+		for( UINT letterIndex = 0; letterIndex < NumLetters; ++letterIndex )
+		{
+			UINT highestCount = 0;
+			UINT highestCountIndex = letterIndex;
+
+			// Find the remaining letter with the highest count
+			for( UINT letterIndexSort = letterIndex; letterIndexSort < NumLetters; ++letterIndexSort )
+			{
+				if( m_overallLetterCountsPerPosition[ letterIndexSort ][ letterWordIndex ] > highestCount )
+				{
+					highestCount = m_overallLetterCountsPerPosition[ letterIndexSort ][ letterWordIndex ];
+					highestCountIndex = letterIndexSort;
+				}
+			}
+
+			// Swap the first entry with the highest
+			UINT swapCount = m_overallLetterCountsPerPosition[ highestCountIndex ][ letterWordIndex ];
+			m_overallLetterCountsPerPosition[ highestCountIndex ][ letterWordIndex ] = m_overallLetterCountsPerPosition[ letterIndex ][ letterWordIndex ];
+			m_overallLetterCountsPerPosition[ letterIndex ][ letterWordIndex ] = swapCount;
+
+			CHAR swapLetter = m_letterRankingsPerPosition[ highestCountIndex ][ letterWordIndex ];
+			m_letterRankingsPerPosition[ highestCountIndex ][ letterWordIndex ] = m_letterRankingsPerPosition[ letterIndex ][ letterWordIndex ];
+			m_letterRankingsPerPosition[ letterIndex ][ letterWordIndex ] = swapLetter;
+		}
+	}
+
+	QueryPerformanceCounter( &endTime );
+	const float analyseDuration = static_cast<float>( endTime.QuadPart - startTime.QuadPart ) * 1000.0f / static_cast<float>( frequency.QuadPart );
+	io::OutputMessage( "Run took %.4fms\n", analyseDuration );
+
 }
 
 }

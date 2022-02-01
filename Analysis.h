@@ -17,9 +17,12 @@ public:
 
 	void				Analyse();
 
+	CHAR				GetMostCommonLetterAtPosition( const UINT position );
+
 private:
 	WordList&			m_wordList;
 	UINT				m_overallLetterCountsPerPosition[ NumLetters ][ Word::WordLength ] = {'\0'};
+	CHAR				m_letterRankingsPerPosition[ NumLetters ][ Word::WordLength ] = { 0 };
 };
 
 }

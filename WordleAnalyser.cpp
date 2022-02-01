@@ -56,6 +56,7 @@ UINT WordleAnalyser::Initialise()
 {
 	m_wordList = new WordList();
 	const UINT wordsRead = m_wordList->ReadWords( WORD_LIST_FILENAME );
+	m_wordList->Randomise();
 
 	return wordsRead;
 }

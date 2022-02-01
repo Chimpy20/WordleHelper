@@ -17,6 +17,8 @@ public:
 
 	UINT					ReadWords( const WCHAR* wordListFileName );
 
+	void					Randomise();
+
 	const containers::List<Word>& GetWordList() const
 	{
 		return m_wordList;
