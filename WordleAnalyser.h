@@ -21,4 +21,4 @@ private:
 	WordList*			m_wordList;
 };
 
-}
+} // namespace wa

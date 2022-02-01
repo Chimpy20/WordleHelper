@@ -62,14 +62,14 @@ public:
 	Iterator( NodeBase* node )
 		: m_node( node ) {}
 
-	const T& operator*() const
+	T& operator*() const
 	{
-		return static_cast<const Node<T>*>( m_node )->m_data;
+		return static_cast<Node<T>*>( m_node )->m_data;
 	}
 
-	const T* operator->() const
+	T* operator->() const
 	{
-		return &static_cast<const Node<T>*>( m_node )->m_data;
+		return &static_cast<Node<T>*>( m_node )->m_data;
 	}
 
 	Iterator& operator++()

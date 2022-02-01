@@ -100,6 +100,37 @@ UINT WordList::ExtractWords()
 
 void WordList::Randomise()
 {
+	LARGE_INTEGER frequency, startTime, endTime;
+	QueryPerformanceFrequency( &frequency );
+	QueryPerformanceCounter( &startTime );
+
+	const UINT numWords = static_cast<UINT>( m_wordList.size() );
+	UINT randomWordIndex = 0;
+	containers::List<Word>::iterator itor = m_wordList.begin();
+	while( itor != m_wordList.end() )
+	{
+		Word& word = *itor;
+
+		randomWordIndex = ( ( randomWordIndex * 1103515245 ) + 12345 ) % numWords;
+		UINT wordIndex = 0;
+		containers::List<Word>::iterator swapItor = m_wordList.begin();
+		while( swapItor != m_wordList.end() && ( wordIndex < randomWordIndex ) )
+		{
+			++swapItor;
+			++wordIndex;
+		}
+		Word& swapWord = *swapItor;
+		Word tmp;
+		tmp = swapWord;
+		swapWord = word;
+		word = tmp;
+
+		++itor;
+	}
+
+	QueryPerformanceCounter( &endTime );
+	const float randomiseDuration = static_cast<float>( endTime.QuadPart - startTime.QuadPart ) * 1000.0f / static_cast<float>( frequency.QuadPart );
+	io::OutputMessage( "Randomising took %.4fms\n", randomiseDuration );
 }
 
 bool WordList::IsLetterAlpha( const CHAR letter )
@@ -144,7 +175,7 @@ UINT WordList::Filter( const FilterWord& filterWord )
 	return static_cast<UINT>( m_wordList.size() );
 }
 
-void WordList::OutputWords()
+void WordList::OutputWords() const
 {
 	containers::List<Word>::const_iterator itor = m_wordList.begin();
 	while( itor != m_wordList.end() )
@@ -155,9 +186,11 @@ void WordList::OutputWords()
 	}
 }
 
-void WordList::Analyse()
+void WordList::Guess()
 {
 	m_analysis.Analyse();
+
+
 }
 
 }

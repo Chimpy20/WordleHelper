@@ -27,4 +27,4 @@ private:
 	FilterLetterState	m_filterLetterStates[ WordLength ] = { FilterLetterState::Incorrect };
 };
 
-}
+} // namespace wa

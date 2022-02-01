@@ -22,4 +22,4 @@ protected:
 	CHAR			m_letters[ WordLength + 1 ] = { '\0' };
 };
 
-}
+} // namespace wa

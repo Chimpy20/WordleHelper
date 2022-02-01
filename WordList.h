@@ -15,22 +15,27 @@ public:
 	WordList();
 	~WordList();
 
-	UINT					ReadWords( const WCHAR* wordListFileName );
-
-	void					Randomise();
-
 	const containers::List<Word>& GetWordList() const
 	{
 		return m_wordList;
 	}
 
+	const Analysis&			GetAnalysis() const
+	{
+		return m_analysis;
+	}
+
+	UINT					ReadWords( const WCHAR* wordListFileName );
+
+	void					Randomise();
+
 	UINT					DuplicateFrom( const WordList& other );
 
 	UINT					Filter( const FilterWord& filterWord );
 
-	void					Analyse();
+	void					Guess();
 
-	void					OutputWords();
+	void					OutputWords() const;
 
 private:
 	static const UINT		MaxWordBufferSize = 16;
@@ -45,4 +50,4 @@ private:
 	Analysis				m_analysis;
 };
 
-}
+} // namespace wa

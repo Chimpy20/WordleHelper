@@ -128,10 +128,12 @@
     <ClInclude Include="Containers.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="FilterWord.h" />
+    <ClInclude Include="Guesser.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="printf.h" />
+    <ClInclude Include="RatedWord.h" />
     <ClInclude Include="Word.h" />
     <ClInclude Include="WordleAnalyser.h" />
     <ClInclude Include="WordList.h" />
@@ -140,6 +142,7 @@
     <ClCompile Include="Analysis.cpp" />
     <ClCompile Include="Containers.cpp" />
     <ClCompile Include="FilterWord.cpp" />
+    <ClCompile Include="Guesser.cpp" />
     <ClCompile Include="IO.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory.cpp" />
@@ -150,6 +153,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="RatedWord.cpp" />
     <ClCompile Include="Word.cpp" />
     <ClCompile Include="WordleAnalyser.cpp" />
     <ClCompile Include="WordList.cpp" />

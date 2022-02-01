@@ -17,7 +17,7 @@ private:
 	static UINT64	sm_heapAllocationsTotal;
 };
 
-}
+} // namespace memory
 
 void* operator new( size_t size );
 void operator delete( void* p );

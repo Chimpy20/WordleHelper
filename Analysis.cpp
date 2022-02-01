@@ -6,7 +6,8 @@ namespace wa
 {
 
 Analysis::Analysis( WordList& wordList ):
-	m_wordList( wordList )
+	m_wordList( wordList ),
+	m_analysisRun( false )
 {
 }
 
@@ -27,7 +28,7 @@ void Analysis::Analyse()
 	containers::List<Word>::const_iterator itor = wordList.begin();
 	while( itor != wordList.end() )
 	{
-		Word word = *itor;
+		const Word& word = *itor;
 		for( UINT letterIndex = 0; letterIndex < Word::WordLength; ++letterIndex )
 		{
 			CHAR letter = word.GetLetterAtPosition( letterIndex ) - FirstLetterOffset;
@@ -40,7 +41,7 @@ void Analysis::Analyse()
 	{
 		for( UINT letterIndex = 0; letterIndex < NumLetters; ++letterIndex )
 		{
-			m_letterRankingsPerPosition[ letterIndex ][ letterWordIndex ] = FirstLetterOffset + letterIndex;
+			m_letterRankingsPerPosition[ letterIndex ][ letterWordIndex ] = static_cast<CHAR>( FirstLetterOffset + letterIndex );
 		}
 
 		// Sort the letters
@@ -70,10 +71,20 @@ void Analysis::Analyse()
 		}
 	}
 
+	m_analysisRun = true;
+
 	QueryPerformanceCounter( &endTime );
 	const float analyseDuration = static_cast<float>( endTime.QuadPart - startTime.QuadPart ) * 1000.0f / static_cast<float>( frequency.QuadPart );
 	io::OutputMessage( "Run took %.4fms\n", analyseDuration );
+}
 
+CHAR Analysis::GetLetterRankAtPosition( const UINT rank, const UINT position )
+{
+	ASSERT( m_analysisRun, "Analysis hasn't been run yet\n" );
+	ASSERT( position < Word::WordLength, "Letter position in word out of range\n" );
+	ASSERT( rank < NumLetters, "Letter rank %u exceeds number of letters\n", rank );
+
+	return m_letterRankingsPerPosition[ rank ][ position ];
 }
 
 }

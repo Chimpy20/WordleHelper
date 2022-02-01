@@ -66,7 +66,7 @@ void WordleAnalyser::Run()
 	WordList* const filteredWords = new WordList();
 	filteredWords->DuplicateFrom(*m_wordList);
 
-	filteredWords->Analyse();
+	filteredWords->Guess();
 
 	UINT uNumFilteredWords = filteredWords->Filter(FilterWord(testFilterLetters1, testFilterLetterStates1));
 	io::OutputMessage("Filtered down to %u words\n", uNumFilteredWords);

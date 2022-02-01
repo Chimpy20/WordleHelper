@@ -48,6 +48,12 @@
     <ClInclude Include="Analysis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Guesser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RatedWord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -81,6 +87,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Analysis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Guesser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RatedWord.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
