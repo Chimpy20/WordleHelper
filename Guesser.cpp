@@ -19,8 +19,6 @@ Word Guesser::Guess( const WordList& masterWordList )
 
 	m_ratedWordList.clear();
 
-	Word bestGuess;
-
 	const WordListContainer& wordList = m_wordList.GetWordList();
 	const WordListContainer& masterWordListContainer = masterWordList.GetWordList();
 
@@ -50,7 +48,7 @@ Word Guesser::Guess( const WordList& masterWordList )
 
 	m_ratedWordList.sort();
 
-	bestGuess = *m_ratedWordList.begin();
+	const Word bestGuess = *m_ratedWordList.begin();
 
 	QueryPerformanceCounter( &endTime );
 	const float guessDuration = static_cast<float>( endTime.QuadPart - startTime.QuadPart ) * 1000.0f / static_cast<float>( frequency.QuadPart );

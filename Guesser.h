@@ -17,6 +17,11 @@ public:
 
 	Word						Guess( const WordList& masterWordList );
 
+	containers::List<RatedWord> GetRatedWordList() const
+	{
+		return m_ratedWordList;
+	}
+
 private:
 	const WordList&				m_wordList;
 	containers::List<RatedWord>	m_ratedWordList;

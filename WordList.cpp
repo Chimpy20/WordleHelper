@@ -7,8 +7,6 @@ namespace wa
 {
 
 WordList::WordList() :
-	m_wordListRaw( nullptr ),
-	m_wordListRawSize( 0 ),
 	m_analysis(*this),
 	m_guesser(*this)
 {
@@ -17,21 +15,12 @@ WordList::WordList() :
 WordList::~WordList()
 {
 	m_wordList.clear();
-
-	if( m_wordListRaw != nullptr )
-	{
-		memory::Heap::Free( m_wordListRaw );
-	}
 }
 
-UINT WordList::ReadWords( const WCHAR* wordListFileName )
+UINT WordList::ReadWords( const WCHAR* wordListFileName, bool append )
 {
-#ifdef _DEBUG
-	if( m_wordListRawSize != 0 )
-	{
-		io::OutputMessage( "Word list already has raw data, is it intended to read more?\n" );
-	}
-#endif
+	CHAR* wordListRaw = nullptr;
+	UINT wordListRawSize = 0;
 
 	HANDLE wordListFileHandle = CreateFileW( wordListFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr );
 	if( wordListFileHandle == INVALID_HANDLE_VALUE )
@@ -44,17 +33,27 @@ UINT WordList::ReadWords( const WCHAR* wordListFileName )
 	LARGE_INTEGER fileSize;
 	if( GetFileSizeEx( wordListFileHandle, &fileSize ) )
 	{
-		m_wordListRaw = (CHAR*)memory::Heap::Alloc( fileSize.QuadPart );
+		wordListRaw = (CHAR*)memory::Heap::Alloc( fileSize.QuadPart );
 		DWORD bytesRead = 0;
-		if( ReadFile( wordListFileHandle, m_wordListRaw, fileSize.LowPart, &bytesRead, nullptr ) )
+		if( ReadFile( wordListFileHandle, wordListRaw, fileSize.LowPart, &bytesRead, nullptr ) )
 		{
 			ASSERT( bytesRead == fileSize.LowPart, "Wrong number of bytes read, read %u, expecting %u\n", bytesRead, fileSize.LowPart );
 			if( bytesRead == fileSize.LowPart )
 			{
-				m_wordListRawSize = bytesRead;
-				numWordsRead = ExtractWords();
+				// Clear the list before if we're not appending
+				if( !append )
+				{
+					m_wordList.clear();
+				}
+				wordListRawSize = bytesRead;
+				numWordsRead = ExtractWords( wordListRaw, wordListRawSize );
 			}
 		}
+	}
+
+	if( wordListRaw != nullptr )
+	{
+		memory::Heap::Free( wordListRaw );
 	}
 
 	CloseHandle( wordListFileHandle );
@@ -62,7 +61,7 @@ UINT WordList::ReadWords( const WCHAR* wordListFileName )
 	return numWordsRead;
 }
 
-UINT WordList::ExtractWords()
+UINT WordList::ExtractWords( const CHAR* wordListRaw, UINT wordListRawSize )
 {
 	UINT numWords = 0;
 	CHAR currentWord[ MaxWordBufferSize ];
@@ -71,17 +70,17 @@ UINT WordList::ExtractWords()
 	UINT offset = 0;
 	CHAR currentLetter = 0;
 
-	while( currentWordListBufferPos < m_wordListRawSize )
+	while( currentWordListBufferPos < wordListRawSize )
 	{
-		currentLetter = m_wordListRaw[ currentWordListBufferPos + offset ];
+		currentLetter = wordListRaw[ currentWordListBufferPos + offset ];
 
 		while( IsLetterAlpha( currentLetter ) &&
 			( offset < MaxWordBufferSize ) &&
-			( ( currentWordListBufferPos + offset ) < m_wordListRawSize ) )
+			( ( currentWordListBufferPos + offset ) < wordListRawSize ) )
 		{
 			currentWord[ offset ] = currentLetter;
 			++offset;
-			currentLetter = m_wordListRaw[ currentWordListBufferPos + offset ];
+			currentLetter = wordListRaw[ currentWordListBufferPos + offset ];
 		};
 
 		if( offset == Word::WordLength )
@@ -112,7 +111,7 @@ void WordList::Randomise()
 	{
 		Word& word = *itor;
 
-		randomWordIndex = ( ( randomWordIndex * 1103515245 ) + 12345 ) % numWords;
+		randomWordIndex = utils::Rand() % numWords;
 		UINT wordIndex = 0;
 		WordListContainer::iterator swapItor = m_wordList.begin();
 		while( swapItor != m_wordList.end() && ( wordIndex < randomWordIndex ) )

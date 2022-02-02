@@ -134,6 +134,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="printf.h" />
     <ClInclude Include="RatedWord.h" />
+    <ClInclude Include="Utils.h" />
     <ClInclude Include="Word.h" />
     <ClInclude Include="WordleAnalyser.h" />
     <ClInclude Include="WordList.h" />
@@ -154,6 +155,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RatedWord.cpp" />
+    <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Word.cpp" />
     <ClCompile Include="WordleAnalyser.cpp" />
     <ClCompile Include="WordList.cpp" />

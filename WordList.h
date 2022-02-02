@@ -29,7 +29,12 @@ public:
 		return m_analysis;
 	}
 
-	UINT					ReadWords( const WCHAR* wordListFileName );
+	const Guesser&			GetGuesser() const
+	{
+		return m_guesser;
+	}
+
+	UINT					ReadWords( const WCHAR* wordListFileName, bool append );
 
 	void					Randomise();
 
@@ -44,11 +49,8 @@ public:
 private:
 	static const UINT		MaxWordBufferSize = 16;
 
-	UINT					ExtractWords();
+	UINT					ExtractWords( const CHAR* wordListRaw, UINT wordListRawSize );
 	bool					IsLetterAlpha( const CHAR letter );
-
-	CHAR*					m_wordListRaw;
-	UINT					m_wordListRawSize;
 
 	WordListContainer		m_wordList;
 	Analysis				m_analysis;
