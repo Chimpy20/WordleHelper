@@ -3,19 +3,23 @@
 #include "Containers.h"
 #include "FilterWord.h"
 #include "Analysis.h"
+#include "Guesser.h"
 
 namespace wa
 {
 
 class Analysis;
+class Guesser;
+
 
 class WordList
 {
 public:
+	typedef containers::List<Word> WordListContainer;
 	WordList();
 	~WordList();
 
-	const containers::List<Word>& GetWordList() const
+	const WordListContainer& GetWordList() const
 	{
 		return m_wordList;
 	}
@@ -33,7 +37,7 @@ public:
 
 	UINT					Filter( const FilterWord& filterWord );
 
-	void					Guess();
+	Word					Guess( const WordList& masterWordList );
 
 	void					OutputWords() const;
 
@@ -46,8 +50,9 @@ private:
 	CHAR*					m_wordListRaw;
 	UINT					m_wordListRawSize;
 
-	containers::List<Word>	m_wordList;
+	WordListContainer		m_wordList;
 	Analysis				m_analysis;
+	Guesser					m_guesser;
 };
 
 } // namespace wa

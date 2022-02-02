@@ -9,7 +9,8 @@ namespace wa
 WordList::WordList() :
 	m_wordListRaw( nullptr ),
 	m_wordListRawSize( 0 ),
-	m_analysis(*this)
+	m_analysis(*this),
+	m_guesser(*this)
 {
 }
 
@@ -106,14 +107,14 @@ void WordList::Randomise()
 
 	const UINT numWords = static_cast<UINT>( m_wordList.size() );
 	UINT randomWordIndex = 0;
-	containers::List<Word>::iterator itor = m_wordList.begin();
+	WordListContainer::iterator itor = m_wordList.begin();
 	while( itor != m_wordList.end() )
 	{
 		Word& word = *itor;
 
 		randomWordIndex = ( ( randomWordIndex * 1103515245 ) + 12345 ) % numWords;
 		UINT wordIndex = 0;
-		containers::List<Word>::iterator swapItor = m_wordList.begin();
+		WordListContainer::iterator swapItor = m_wordList.begin();
 		while( swapItor != m_wordList.end() && ( wordIndex < randomWordIndex ) )
 		{
 			++swapItor;
@@ -144,8 +145,8 @@ bool WordList::IsLetterAlpha( const CHAR letter )
 
 UINT WordList::DuplicateFrom( const WordList& other )
 {
-	const containers::List<Word>& sourceWordList = other.m_wordList;
-	containers::List<Word>::const_iterator itor = sourceWordList.begin();
+	const WordListContainer& sourceWordList = other.m_wordList;
+	WordListContainer::const_iterator itor = sourceWordList.begin();
 	while( itor != sourceWordList.end() )
 	{
 		const Word word = *itor;
@@ -158,7 +159,7 @@ UINT WordList::DuplicateFrom( const WordList& other )
 
 UINT WordList::Filter( const FilterWord& filterWord )
 {
-	containers::List<Word>::iterator itor = m_wordList.begin();
+	WordListContainer::iterator itor = m_wordList.begin();
 	while( itor != m_wordList.end() )
 	{
 		Word word = *itor;
@@ -177,7 +178,7 @@ UINT WordList::Filter( const FilterWord& filterWord )
 
 void WordList::OutputWords() const
 {
-	containers::List<Word>::const_iterator itor = m_wordList.begin();
+	WordListContainer::const_iterator itor = m_wordList.begin();
 	while( itor != m_wordList.end() )
 	{
 		Word word = *itor;
@@ -186,11 +187,10 @@ void WordList::OutputWords() const
 	}
 }
 
-void WordList::Guess()
+Word WordList::Guess( const WordList& masterWordList )
 {
 	m_analysis.Analyse();
-
-
+	return m_guesser.Guess( masterWordList );
 }
 
 }

@@ -63,10 +63,12 @@ UINT WordleAnalyser::Initialise()
 
 void WordleAnalyser::Run()
 {
+	ASSERT( m_wordList != nullptr, "Word list doesn't exist\n" );
 	WordList* const filteredWords = new WordList();
-	filteredWords->DuplicateFrom(*m_wordList);
+	filteredWords->DuplicateFrom( *m_wordList );
 
-	filteredWords->Guess();
+	Word bestGuess = filteredWords->Guess( *m_wordList );
+	io::OutputMessage( "Best guess is %s\n", bestGuess.GetAsString() );
 
 	UINT uNumFilteredWords = filteredWords->Filter(FilterWord(testFilterLetters1, testFilterLetterStates1));
 	io::OutputMessage("Filtered down to %u words\n", uNumFilteredWords);

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Containers.h"
 #include "RatedWord.h"
 
 namespace wa
@@ -10,9 +11,11 @@ class WordList;
 class Guesser
 {
 public:
+	typedef containers::List<Word> WordListContainer;
+
 	Guesser( const WordList& wordList );
 
-	Word						Guess();
+	Word						Guess( const WordList& masterWordList );
 
 private:
 	const WordList&				m_wordList;

@@ -204,6 +204,29 @@ public:
 	{
 		return m_size;
 	}
+
+	inline void sort()
+	{
+		Node<T>* start = static_cast<Node<T>*>( m_head.m_next );
+		while( start != &m_head )
+		{
+			Node<T>* highestVal = start;
+			Node<T>* node = static_cast<Node<T>*>( start->m_next );
+			while( node != &m_head )
+			{
+				if( node->m_data > highestVal->m_data )
+				{
+					highestVal = node;
+				}
+				node = static_cast<Node<T>*>( node->m_next );
+			}
+			T tmp = start->m_data;
+			start->m_data = highestVal->m_data;
+			highestVal->m_data = tmp;
+
+			start = static_cast<Node<T>*>( start->m_next );
+		}
+	}
 };
 
 }

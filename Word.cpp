@@ -9,7 +9,7 @@ Word::Word()
 	m_letters[ 0 ] = '\0';
 }
 
-Word::Word( CHAR letters[ WordLength ] )
+Word::Word( const CHAR* letters )
 {
 	for( UINT letterIndex = 0; letterIndex < WordLength; ++letterIndex )
 	{
