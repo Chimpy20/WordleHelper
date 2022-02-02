@@ -11,7 +11,7 @@ Guesser::Guesser( const WordList& wordList ):
 {
 }
 
-Word Guesser::Guess( const WordList& masterWordList )
+void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 {
 	LARGE_INTEGER frequency, startTime, endTime;
 	QueryPerformanceFrequency( &frequency );
@@ -21,6 +21,8 @@ Word Guesser::Guess( const WordList& masterWordList )
 
 	const WordListContainer& wordList = m_wordList.GetWordList();
 	const WordListContainer& masterWordListContainer = masterWordList.GetWordList();
+
+	const float masterWordsDivisor = static_cast<float>( masterWordListContainer.size() - 1 );
 
 	containers::List<Word>::const_iterator itor = wordList.begin();
 	while( itor != wordList.end() )
@@ -34,12 +36,14 @@ Word Guesser::Guess( const WordList& masterWordList )
 		while( masterListItor != masterWordListContainer.end() )
 		{
 			const Word& masterWord = *masterListItor;
-			rating += ratedWord.RateAgainst( masterWord );
-
+			if( word != masterWord )
+			{
+				rating += ratedWord.RateAgainst( masterWord, analysis );
+			}
 			++masterListItor;
 		}
 
-		rating /= static_cast<float>( masterWordListContainer.size() );
+		rating /= masterWordsDivisor;
 		ratedWord.SetRating( rating );
 
 		m_ratedWordList.push_back( ratedWord );
@@ -48,13 +52,9 @@ Word Guesser::Guess( const WordList& masterWordList )
 
 	m_ratedWordList.sort();
 
-	const Word bestGuess = *m_ratedWordList.begin();
-
 	QueryPerformanceCounter( &endTime );
 	const float guessDuration = static_cast<float>( endTime.QuadPart - startTime.QuadPart ) * 1000.0f / static_cast<float>( frequency.QuadPart );
 	io::OutputMessage( "Guess took %.4fms\n", guessDuration );
-
-	return bestGuess;
 }
 
 }

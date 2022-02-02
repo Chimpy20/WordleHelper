@@ -5,6 +5,8 @@
 namespace wa
 {
 
+class Analysis;
+
 class RatedWord : public Word
 {
 public:
@@ -27,7 +29,7 @@ public:
 	}
 	void					SetRating( const float rating );
 
-	float					RateAgainst( const Word& testWord );
+	float					RateAgainst( const Word& testWord, const Analysis& analysis );
 
 private:
 	float					m_rating;

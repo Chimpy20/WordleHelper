@@ -15,9 +15,9 @@ public:
 
 	Guesser( const WordList& wordList );
 
-	Word						Guess( const WordList& masterWordList );
+	void						Guess( const WordList& masterWordList, const Analysis& analysis );
 
-	containers::List<RatedWord> GetRatedWordList() const
+	const containers::List<RatedWord>& GetRatedWordList() const
 	{
 		return m_ratedWordList;
 	}

@@ -23,7 +23,7 @@ void Analysis::Analyse()
 	{
 		entriesBase[ entry ] = 0;
 	}
-
+	
 	const containers::List<Word>& wordList = m_wordList.GetWordList();
 	containers::List<Word>::const_iterator itor = wordList.begin();
 	while( itor != wordList.end() )
@@ -75,16 +75,24 @@ void Analysis::Analyse()
 
 	QueryPerformanceCounter( &endTime );
 	const float analyseDuration = static_cast<float>( endTime.QuadPart - startTime.QuadPart ) * 1000.0f / static_cast<float>( frequency.QuadPart );
-	io::OutputMessage( "Run took %.4fms\n", analyseDuration );
+	io::OutputMessage( "Analysis took %.4fms\n", analyseDuration );
 }
 
-CHAR Analysis::GetLetterRankAtPosition( const UINT rank, const UINT position )
+CHAR Analysis::GetLetterForRankAtPosition( const UINT rank, const UINT position ) const
 {
 	ASSERT( m_analysisRun, "Analysis hasn't been run yet\n" );
 	ASSERT( position < Word::WordLength, "Letter position in word out of range\n" );
 	ASSERT( rank < NumLetters, "Letter rank %u exceeds number of letters\n", rank );
 
 	return m_letterRankingsPerPosition[ rank ][ position ];
+}
+
+float Analysis::GetRankForLetterAtPosition( const CHAR letter, const UINT position ) const
+{
+	ASSERT( m_analysisRun, "Analysis hasn't been run yet\n" );
+	ASSERT( position < Word::WordLength, "Letter position in word out of range\n" );
+
+	return 0.0f;
 }
 
 }

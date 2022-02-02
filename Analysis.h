@@ -17,7 +17,8 @@ public:
 
 	void				Analyse();
 
-	CHAR				GetLetterRankAtPosition( const UINT rank, const UINT position );
+	CHAR				GetLetterForRankAtPosition( const UINT rank, const UINT position ) const;
+	float				GetRankForLetterAtPosition( const CHAR letter, const UINT position ) const;
 
 private:
 	WordList&			m_wordList;

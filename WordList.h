@@ -42,7 +42,7 @@ public:
 
 	UINT					Filter( const FilterWord& filterWord );
 
-	Word					Guess( const WordList& masterWordList );
+	void					Guess( const WordList& masterWordList );
 
 	void					OutputWords() const;
 

@@ -186,10 +186,10 @@ void WordList::OutputWords() const
 	}
 }
 
-Word WordList::Guess( const WordList& masterWordList )
+void WordList::Guess( const WordList& masterWordList )
 {
 	m_analysis.Analyse();
-	return m_guesser.Guess( masterWordList );
+	m_guesser.Guess( masterWordList, m_analysis );
 }
 
 }
