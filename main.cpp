@@ -4,6 +4,11 @@
 
 int main()
 {
+	if( !memory::Heap::Create() )
+	{
+		return false;
+	}
+
 	LARGE_INTEGER frequency, startTime, endTime;
 	QueryPerformanceFrequency( &frequency );
 	QueryPerformanceCounter( &startTime );
@@ -17,10 +22,12 @@ int main()
 
 	wordleAnalyser.Shutdown();
 
+	memory::Heap::Destroy();
+
     return 0;
 }
 
-int WINAPI wWinMain( HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow )
+int WINAPI WinMain( HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow )
 {
 	if( system::Initialise( instance, cmdLine, cmdShow ) )
 	{

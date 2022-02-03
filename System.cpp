@@ -14,11 +14,19 @@ bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 		return false;
 	}
 
-	return DialogBox( instance, MAKEINTRESOURCE(IDD_DIALOG), GetDesktopWindow(), DlgProc );
+	DialogBox( instance, MAKEINTRESOURCE(IDD_DIALOG), GetDesktopWindow(), DlgProc );
+
+	return true;
 }
 
 void Run()
 {
+	MSG message;
+	while( GetMessage( &message, NULL, 0, 0 ) > 0 )
+	{
+		TranslateMessage( &message );
+		DispatchMessage( &message );
+	}
 }
 
 void Shutdown()
