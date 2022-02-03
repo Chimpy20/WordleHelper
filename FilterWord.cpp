@@ -29,13 +29,13 @@ bool FilterWord::PotentialMatch( const Word& word ) const
 	bool potentialMatch = true;
 	for( UINT letterIndex = 0; letterIndex < WordLength; ++letterIndex )
 	{
-		CHAR letter = m_letters[ letterIndex ];
-		// If an incorrect letter is in the test word at all, then it can't be a match
+		const CHAR letter = m_letters[ letterIndex ];
+
 		switch( m_filterLetterStates[ letterIndex ] )
 		{
 			case FilterLetterState::Incorrect:
 			{
-				// Search the test word for that letter
+				// If an incorrect letter is in the test word at all, then it can't be a match
 				for( UINT testWordLetterIndex = 0; testWordLetterIndex < WordLength; ++testWordLetterIndex )
 				{
 					if( word.GetLetterAtPosition( testWordLetterIndex ) == letter )
@@ -49,6 +49,7 @@ bool FilterWord::PotentialMatch( const Word& word ) const
 
 		case FilterLetterState::WrongPosition:
 			{
+				// check to see if the letter is in another position, if it is, this could be a match
 				bool isLetterInWordAtAnyPlace = false;
 				for( UINT testWordLetterIndex = 0; testWordLetterIndex < WordLength; ++testWordLetterIndex )
 				{
@@ -67,6 +68,7 @@ bool FilterWord::PotentialMatch( const Word& word ) const
 
 		case FilterLetterState::Correct:
 			{
+				// If a wrong letter is in a position we know is correct, then this word can't be right
 				if( word.GetLetterAtPosition( letterIndex ) != letter )
 				{
 					potentialMatch = false;

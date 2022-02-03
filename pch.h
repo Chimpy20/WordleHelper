@@ -2,7 +2,6 @@
 #include <windows.h>
 #include <winerror.h>
 #include "Memory.h"
-#include "Containers.h"
 #include "IO.h"
 #include "Debug.h"
 #include "Utils.h"
@@ -13,7 +12,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-	int _fltused = 0; // it should be a single underscore since the double one is the mangled name
+	int _fltused = 0;
 #ifdef __cplusplus
 }
 #endif

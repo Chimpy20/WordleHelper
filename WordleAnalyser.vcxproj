@@ -126,7 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Analysis.h" />
-    <ClInclude Include="Containers.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="FilterWord.h" />
     <ClInclude Include="Guesser.h" />
@@ -135,6 +135,8 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="printf.h" />
     <ClInclude Include="RatedWord.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="System.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Word.h" />
     <ClInclude Include="WordleAnalyser.h" />
@@ -142,7 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Analysis.cpp" />
-    <ClCompile Include="Containers.cpp" />
+    <ClCompile Include="List.cpp" />
     <ClCompile Include="FilterWord.cpp" />
     <ClCompile Include="Guesser.cpp" />
     <ClCompile Include="IO.cpp" />
@@ -156,13 +158,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RatedWord.cpp" />
+    <ClCompile Include="System.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Word.cpp" />
     <ClCompile Include="WordleAnalyser.cpp" />
     <ClCompile Include="WordList.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="PropertySheet.props" />
     <Text Include="readme.txt">
       <DeploymentContent>false</DeploymentContent>
@@ -172,7 +174,7 @@
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <AppxManifest Include="Package.appxmanifest" />
+    <ResourceCompile Include="WordleAnalyser.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

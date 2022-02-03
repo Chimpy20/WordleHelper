@@ -13,48 +13,53 @@ Guesser::Guesser( const WordList& wordList ):
 
 void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 {
-	LARGE_INTEGER frequency, startTime, endTime;
-	QueryPerformanceFrequency( &frequency );
-	QueryPerformanceCounter( &startTime );
+	utils::StartTimer();
 
+	 // Clear the resultant list is case this is not the first time of running
 	m_ratedWordList.clear();
 
-	const WordListContainer& wordList = m_wordList.GetWordList();
+	const WordListContainer& wordListContainer = m_wordList.GetWordList();
 	const WordListContainer& masterWordListContainer = masterWordList.GetWordList();
 
+	ASSERT( masterWordListContainer.size() >= 1, "Too few words in master list\n" );
 	const float masterWordsDivisor = static_cast<float>( masterWordListContainer.size() - 1 );
 
-	containers::List<Word>::const_iterator itor = wordList.begin();
-	while( itor != wordList.end() )
+	// Examine each word which could be used to most effictively reduce down the number of possibilities
+	// even if it might not be a solution
+	containers::List<Word>::const_iterator masterListItor = masterWordListContainer.begin();
+	while( masterListItor != masterWordListContainer.end() )
 	{
-		const Word& word = *itor;
+		const Word& word = *masterListItor;
+
+		// Create a rated word from the word from the master list
 		RatedWord ratedWord( word.GetAsString() );
 		float rating = 0.0f;
 
-		// If this was the correct word, see how many of the other words would provide correct letters
-		containers::List<Word>::const_iterator masterListItor = masterWordListContainer.begin();
-		while( masterListItor != masterWordListContainer.end() )
+		// Examine each possible solution, and determine how well the rated word would fare in
+		// identifying it
+		WordListContainer::const_iterator listItor = wordListContainer.begin();
+		while( listItor != wordListContainer.end() )
 		{
-			const Word& masterWord = *masterListItor;
-			if( word != masterWord )
+			const Word& checkWord = *listItor;
+			if( word != checkWord )
 			{
-				rating += ratedWord.RateAgainst( masterWord, analysis );
+				rating += ratedWord.RateAgainst( checkWord, analysis );
 			}
-			++masterListItor;
+			++listItor;
 		}
 
+		// Normalise the rating
 		rating /= masterWordsDivisor;
 		ratedWord.SetRating( rating );
 
+		// Store the rated word
 		m_ratedWordList.push_back( ratedWord );
-		++itor;
+		++masterListItor;
 	}
 
 	m_ratedWordList.sort();
 
-	QueryPerformanceCounter( &endTime );
-	const float guessDuration = static_cast<float>( endTime.QuadPart - startTime.QuadPart ) * 1000.0f / static_cast<float>( frequency.QuadPart );
-	io::OutputMessage( "Guess took %.4fms\n", guessDuration );
+	utils::EndTimer( "Guess");
 }
 
 }

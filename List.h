@@ -53,13 +53,13 @@ public:
 };
 
 template<typename T>
-class Iterator
+class ListIterator
 {
 public:
 	NodeBase*		m_node;
 
-	Iterator() : m_node() {}
-	Iterator( NodeBase* node )
+	ListIterator() : m_node() {}
+	ListIterator( NodeBase* node )
 		: m_node( node ) {}
 
 	T& operator*() const
@@ -72,33 +72,32 @@ public:
 		return &static_cast<Node<T>*>( m_node )->m_data;
 	}
 
-	Iterator& operator++()
+	ListIterator& operator++()
 	{
 		m_node = m_node->m_next;
 		return *this;
 	}
 
-	Iterator operator++( int )
+	ListIterator operator++( int )
 	{
-		Iterator tmp = *this;
+		ListIterator tmp = *this;
 		m_node = m_node->m_next;
 		return tmp;
 	}
 
-	bool operator==( Iterator other ) const { return m_node == other.m_node; }
-	bool operator!=( Iterator other ) const { return m_node != other.m_node; }
-
+	bool operator==( ListIterator other ) const { return m_node == other.m_node; }
+	bool operator!=( ListIterator other ) const { return m_node != other.m_node; }
 };
 
 template<typename T>
-class ConstIterator
+class ListConstIterator
 {
 public:
 	const NodeBase* m_node;
 
-	ConstIterator(): m_node() {}
-	ConstIterator( const NodeBase* node ) : m_node( node ) {}
-	ConstIterator( const Iterator<T>& node ) : m_node( node.m_node ) {}
+	ListConstIterator(): m_node() {}
+	ListConstIterator( const NodeBase* node ) : m_node( node ) {}
+	ListConstIterator( const ListConstIterator<T>& node ) : m_node( node.m_node ) {}
 
 	const T& operator*() const
 	{
@@ -110,22 +109,21 @@ public:
 		return &static_cast<const Node<T>*>( m_node )->m_data;
 	}
 
-	ConstIterator& operator++()
+	ListConstIterator& operator++()
 	{
 		m_node = m_node->m_next;
 		return *this;
 	}
 
-	ConstIterator operator++( int )
+	ListConstIterator operator++( int )
 	{
-		ConstIterator tmp = *this;
+		ListConstIterator tmp = *this;
 		m_node = m_node->m_next;
 		return tmp;
 	}
 
-	bool operator==( ConstIterator other ) const { return m_node == other.m_node; }
-	bool operator!=( ConstIterator other ) const { return m_node != other.m_node; }
-
+	bool operator==( ListConstIterator other ) const { return m_node == other.m_node; }
+	bool operator!=( ListConstIterator other ) const { return m_node != other.m_node; }
 };
 
 template <class T>
@@ -136,8 +134,8 @@ private:
 	size_t			m_size;
 
 public:
-	typedef Iterator<T> iterator;
-	typedef ConstIterator<T> const_iterator;
+	typedef ListIterator<T> iterator;
+	typedef ListConstIterator<T> const_iterator;
 
 	List():
 		m_size( 0 )

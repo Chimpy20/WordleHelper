@@ -32,6 +32,10 @@ public:
 	float					RateAgainst( const Word& testWord, const Analysis& analysis );
 
 private:
+	static const float		CorrectLetterScore;
+	static const float		WrongPositionScore;
+	static const float		MultipleLetterPenalty;
+
 	float					m_rating;
 };
 

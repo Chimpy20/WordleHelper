@@ -100,9 +100,7 @@ UINT WordList::ExtractWords( const CHAR* wordListRaw, UINT wordListRawSize )
 
 void WordList::Randomise()
 {
-	LARGE_INTEGER frequency, startTime, endTime;
-	QueryPerformanceFrequency( &frequency );
-	QueryPerformanceCounter( &startTime );
+	utils::StartTimer();
 
 	const UINT numWords = static_cast<UINT>( m_wordList.size() );
 	UINT randomWordIndex = 0;
@@ -128,9 +126,7 @@ void WordList::Randomise()
 		++itor;
 	}
 
-	QueryPerformanceCounter( &endTime );
-	const float randomiseDuration = static_cast<float>( endTime.QuadPart - startTime.QuadPart ) * 1000.0f / static_cast<float>( frequency.QuadPart );
-	io::OutputMessage( "Randomising took %.4fms\n", randomiseDuration );
+	utils::EndTimer( "Randomise" );
 }
 
 bool WordList::IsLetterAlpha( const CHAR letter )

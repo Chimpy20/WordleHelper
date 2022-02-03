@@ -64,6 +64,8 @@ UINT WordleAnalyser::Initialise()
 void WordleAnalyser::Run()
 {
 	ASSERT( m_wordList != nullptr, "Word list doesn't exist\n" );
+
+	// Create a word list that is a copy of the list of possible solutions
 	WordList* const filteredWords = new WordList();
 	filteredWords->DuplicateFrom( *m_wordList );
 

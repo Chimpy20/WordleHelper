@@ -1,13 +1,9 @@
 ﻿#include "pch.h"
 #include "WordleAnalyser.h"
+#include "System.h"
 
 int main()
 {
-	if( !memory::Heap::Create() )
-	{
-		return -1;
-	}
-
 	LARGE_INTEGER frequency, startTime, endTime;
 	QueryPerformanceFrequency( &frequency );
 	QueryPerformanceCounter( &startTime );
@@ -20,7 +16,17 @@ int main()
 	wordleAnalyser.Run();
 
 	wordleAnalyser.Shutdown();
-	memory::Heap::Destroy();
 
     return 0;
+}
+
+int WINAPI wWinMain( HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow )
+{
+	if( system::Initialise( instance, cmdLine, cmdShow ) )
+	{
+		system::Run();
+		system::Shutdown();
+	}
+
+	return 0;
 }

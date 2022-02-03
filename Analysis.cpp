@@ -13,15 +13,13 @@ Analysis::Analysis( WordList& wordList ):
 
 void Analysis::Analyse()
 {
-	LARGE_INTEGER frequency, startTime, endTime;
-	QueryPerformanceFrequency( &frequency );
-	QueryPerformanceCounter( &startTime );
+	utils::StartTimer();
 
 	const UINT numEntries = NumLetters * Word::WordLength;
-	UINT* entriesBase = &( m_overallLetterCountsPerPosition[ 0 ][ 0 ] );
+	LetterRankInfo* entriesBase = &( m_letterRanksPerPosition[ 0 ][ 0 ] );
 	for( UINT entry = 0; entry < numEntries; ++entry )
 	{
-		entriesBase[ entry ] = 0;
+		entriesBase->Reset();
 	}
 	
 	const containers::List<Word>& wordList = m_wordList.GetWordList();
@@ -32,7 +30,7 @@ void Analysis::Analyse()
 		for( UINT letterIndex = 0; letterIndex < Word::WordLength; ++letterIndex )
 		{
 			CHAR letter = word.GetLetterAtPosition( letterIndex ) - FirstLetterOffset;
-			++m_overallLetterCountsPerPosition[ letter ][ letterIndex ];
+			++m_letterRanksPerPosition[ letter ][ letterIndex ].m_count;
 		}
 		itor++;
 	}
@@ -41,41 +39,40 @@ void Analysis::Analyse()
 	{
 		for( UINT letterIndex = 0; letterIndex < NumLetters; ++letterIndex )
 		{
-			m_letterRankingsPerPosition[ letterIndex ][ letterWordIndex ] = static_cast<CHAR>( FirstLetterOffset + letterIndex );
+			m_letterRanksPerPosition[ letterIndex ][ letterWordIndex ].m_letter = static_cast<CHAR>( FirstLetterOffset + letterIndex );
 		}
 
 		// Sort the letters
+		UINT highestCount = 0;
 		for( UINT letterIndex = 0; letterIndex < NumLetters; ++letterIndex )
 		{
-			UINT highestCount = 0;
 			UINT highestCountIndex = letterIndex;
 
 			// Find the remaining letter with the highest count
 			for( UINT letterIndexSort = letterIndex; letterIndexSort < NumLetters; ++letterIndexSort )
 			{
-				if( m_overallLetterCountsPerPosition[ letterIndexSort ][ letterWordIndex ] > highestCount )
+				if( m_letterRanksPerPosition[ letterIndexSort ][ letterWordIndex ].m_count > highestCount )
 				{
-					highestCount = m_overallLetterCountsPerPosition[ letterIndexSort ][ letterWordIndex ];
+					highestCount = m_letterRanksPerPosition[ letterIndexSort ][ letterWordIndex ].m_count;
 					highestCountIndex = letterIndexSort;
 				}
 			}
 
 			// Swap the first entry with the highest
-			UINT swapCount = m_overallLetterCountsPerPosition[ highestCountIndex ][ letterWordIndex ];
-			m_overallLetterCountsPerPosition[ highestCountIndex ][ letterWordIndex ] = m_overallLetterCountsPerPosition[ letterIndex ][ letterWordIndex ];
-			m_overallLetterCountsPerPosition[ letterIndex ][ letterWordIndex ] = swapCount;
+			LetterRankInfo swap = m_letterRanksPerPosition[ highestCountIndex ][ letterWordIndex ];
+			m_letterRanksPerPosition[ highestCountIndex ][ letterWordIndex ] = m_letterRanksPerPosition[ letterIndex ][ letterWordIndex ];
+			m_letterRanksPerPosition[ letterIndex ][ letterWordIndex ] = swap;
+		}
 
-			CHAR swapLetter = m_letterRankingsPerPosition[ highestCountIndex ][ letterWordIndex ];
-			m_letterRankingsPerPosition[ highestCountIndex ][ letterWordIndex ] = m_letterRankingsPerPosition[ letterIndex ][ letterWordIndex ];
-			m_letterRankingsPerPosition[ letterIndex ][ letterWordIndex ] = swapLetter;
+		for( UINT letterIndex = 0; letterIndex < NumLetters; ++letterIndex )
+		{
+			m_letterRanksPerPosition[ letterIndex ][ letterWordIndex ].m_weight = static_cast<float>( m_letterRanksPerPosition[ letterIndex ][ letterWordIndex ].m_count ) / static_cast<float>( highestCount );
 		}
 	}
 
-	m_analysisRun = true;
+	utils::EndTimer( "Analysis" );
 
-	QueryPerformanceCounter( &endTime );
-	const float analyseDuration = static_cast<float>( endTime.QuadPart - startTime.QuadPart ) * 1000.0f / static_cast<float>( frequency.QuadPart );
-	io::OutputMessage( "Analysis took %.4fms\n", analyseDuration );
+	m_analysisRun = true;
 }
 
 CHAR Analysis::GetLetterForRankAtPosition( const UINT rank, const UINT position ) const
@@ -84,15 +81,26 @@ CHAR Analysis::GetLetterForRankAtPosition( const UINT rank, const UINT position 
 	ASSERT( position < Word::WordLength, "Letter position in word out of range\n" );
 	ASSERT( rank < NumLetters, "Letter rank %u exceeds number of letters\n", rank );
 
-	return m_letterRankingsPerPosition[ rank ][ position ];
+	return m_letterRanksPerPosition[ rank ][ position ].m_letter;
 }
 
-float Analysis::GetRankForLetterAtPosition( const CHAR letter, const UINT position ) const
+float Analysis::GetWeightForLetterAtPosition( const CHAR letter, const UINT position ) const
 {
 	ASSERT( m_analysisRun, "Analysis hasn't been run yet\n" );
 	ASSERT( position < Word::WordLength, "Letter position in word out of range\n" );
 
-	return 0.0f;
+	// Find the letter in the array
+	float weight = 0.0f;
+	for( UINT letterIndex = 0; letterIndex < NumLetters; ++letterIndex )
+	{
+		if( m_letterRanksPerPosition[ letterIndex ][ position ].m_letter == letter )
+		{
+			weight = m_letterRanksPerPosition[ letterIndex ][ position ].m_weight;
+			break;
+		}
+	}
+
+	return weight;
 }
 
 }
