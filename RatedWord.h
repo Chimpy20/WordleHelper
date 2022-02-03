@@ -35,6 +35,7 @@ private:
 	static const float		CorrectLetterScore;
 	static const float		WrongPositionScore;
 	static const float		MultipleLetterPenalty;
+	static const float		IncorrectLetterBonus;
 
 	float					m_rating;
 };

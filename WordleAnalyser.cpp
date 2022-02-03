@@ -10,10 +10,10 @@ const WCHAR* const WordleAnalyser::WORD_LIST_FILENAME = L"wordlist.txt";
 const CHAR testFilterLetters1[ Word::WordLength ] =
 {
 	's',
+	'a',
 	'u',
-	'n',
-	'e',
-	't'
+	'c',
+	'y'
 };
 
 const FilterLetterState testFilterLetterStates1[ Word::WordLength ] = 
@@ -22,12 +22,12 @@ const FilterLetterState testFilterLetterStates1[ Word::WordLength ] =
 	FilterLetterState::Incorrect,
 	FilterLetterState::Incorrect,
 	FilterLetterState::Incorrect,
-	FilterLetterState::Correct
+	FilterLetterState::Incorrect
 };
 
 const CHAR testFilterLetters2[ Word::WordLength ] =
 {
-	'c',
+	't',
 	'o',
 	'a',
 	's',
@@ -36,7 +36,7 @@ const CHAR testFilterLetters2[ Word::WordLength ] =
 
 const FilterLetterState testFilterLetterStates2[ Word::WordLength ] =
 {
-	FilterLetterState::Incorrect,
+	FilterLetterState::WrongPosition,
 	FilterLetterState::Correct,
 	FilterLetterState::Incorrect,
 	FilterLetterState::Correct,
@@ -69,9 +69,9 @@ void WordleAnalyser::Run()
 	WordList* const filteredWords = new WordList();
 	filteredWords->DuplicateFrom( *m_wordList );
 
-	filteredWords->Guess( *m_wordList );
-
 	const Guesser& guesser = filteredWords->GetGuesser();
+
+	filteredWords->Guess( *m_wordList );
 
 	{
 		const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
@@ -80,7 +80,7 @@ void WordleAnalyser::Run()
 		while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
 		{
 			const RatedWord& word = *itor;
-			io::OutputMessage( "\t%s (%.3f)\n", word.GetAsString(), word.GetRating() );
+			io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
 			++itor;
 			++wordsToDisplay;
 		}
@@ -104,7 +104,7 @@ void WordleAnalyser::Run()
 		while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
 		{
 			const RatedWord& word = *itor;
-			io::OutputMessage( "\t%s (%.3f)\n", word.GetAsString(), word.GetRating() );
+			io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
 			++itor;
 			++wordsToDisplay;
 		}

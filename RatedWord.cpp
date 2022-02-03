@@ -7,7 +7,8 @@ namespace wa
 
 const float		RatedWord::CorrectLetterScore = 0.5f;
 const float		RatedWord::WrongPositionScore = 0.25f;
-const float		RatedWord::MultipleLetterPenalty = 0.1f;
+const float		RatedWord::MultipleLetterPenalty = 1.0f;
+const float		RatedWord::IncorrectLetterBonus = 0.05f;
 
 RatedWord::RatedWord():
 	m_rating( 1.0f )
@@ -72,9 +73,12 @@ float RatedWord::RateAgainst( const Word& testWord, const Analysis& analysis )
 		else
 		{
 			// Not being found is also useful as it eliminates letters - award a score for eliminated common letters
-			rating = WrongPositionScore * analysis.GetWeightForLetterAtPosition( testLetter, letterIndex );
+			rating += IncorrectLetterBonus * analysis.GetWeightForLetterAtPosition( testLetter, letterIndex );
 		}
 	}
+
+	if( rating < 0.0f )
+		rating = 0.0f;
 
 	return rating;
 }

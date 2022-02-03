@@ -87,12 +87,12 @@
       <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <StackReserveSize Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">16384</StackReserveSize>
       <EnableUAC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableUAC>
       <IgnoreAllDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreAllDefaultLibraries>
-      <EntryPointSymbol Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">main</EntryPointSymbol>
+      <EntryPointSymbol Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">WinMain</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
@@ -115,13 +115,13 @@
       <EnableFiberSafeOptimizations Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</EnableFiberSafeOptimizations>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <StackReserveSize Condition="'$(Configuration)|$(Platform)'=='Release|x64'">16384</StackReserveSize>
       <IgnoreAllDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreAllDefaultLibraries>
-      <EntryPointSymbol Condition="'$(Configuration)|$(Platform)'=='Release|x64'">main</EntryPointSymbol>
+      <EntryPointSymbol Condition="'$(Configuration)|$(Platform)'=='Release|x64'">WinMain</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
