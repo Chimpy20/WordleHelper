@@ -24,7 +24,7 @@ int main()
 
 	memory::Heap::Destroy();
 
-    return 0;
+	return 0;
 }
 
 int WINAPI WinMain( HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow )
