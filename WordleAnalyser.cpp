@@ -18,8 +18,8 @@ const CHAR testFilterLetters1[ Word::WordLength ] =
 
 const FilterLetterState testFilterLetterStates1[ Word::WordLength ] = 
 {
-	FilterLetterState::WrongPosition,
 	FilterLetterState::Incorrect,
+	FilterLetterState::WrongPosition,
 	FilterLetterState::Incorrect,
 	FilterLetterState::Incorrect,
 	FilterLetterState::Incorrect
@@ -27,11 +27,11 @@ const FilterLetterState testFilterLetterStates1[ Word::WordLength ] =
 
 const CHAR testFilterLetters2[ Word::WordLength ] =
 {
-	't',
-	'o',
 	'a',
-	's',
-	't'
+	'l',
+	'g',
+	'a',
+	'e'
 };
 
 const FilterLetterState testFilterLetterStates2[ Word::WordLength ] =
@@ -40,7 +40,7 @@ const FilterLetterState testFilterLetterStates2[ Word::WordLength ] =
 	FilterLetterState::Correct,
 	FilterLetterState::Incorrect,
 	FilterLetterState::Correct,
-	FilterLetterState::Correct
+	FilterLetterState::WrongPosition
 };
 
 WordleAnalyser::WordleAnalyser():
