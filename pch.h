@@ -5,16 +5,9 @@
 #include "IO.h"
 #include "Debug.h"
 #include "Utils.h"
+#include "resource.h"
 
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-	int _fltused = 0;
-#ifdef __cplusplus
-}
-#endif
 
 #pragma warning( disable : 4100 )

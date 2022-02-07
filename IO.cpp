@@ -7,9 +7,6 @@ namespace io
 
 static const UINT MaxDebugMessageSize = 1024;
 
-//#pragma warning( push )
-//#pragma warning( disable : 4996 )
-
 void OutputMessage( const CHAR* const message, ... )
 {
 	CHAR messageBuffer[ MaxDebugMessageSize ];
@@ -20,7 +17,5 @@ void OutputMessage( const CHAR* const message, ... )
 
 	OutputDebugStringA( messageBuffer );
 }
-
-//#pragma warning( pop )
 
 }

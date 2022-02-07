@@ -3,12 +3,12 @@
 #include "System.h"
 #include "resource.h"
 
-INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam );
-
 namespace system
 {
 
-HWND g_dlg = 0;
+HWND g_dialog = NULL;
+
+INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam );
 
 bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 {
@@ -19,11 +19,40 @@ bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 
 	InitCommonControls();
 
-	g_dlg = CreateDialogParam( instance, MAKEINTRESOURCE( IDD_DIALOG ), GetDesktopWindow(), DlgProc, 0 );
-	DWORD lastError = GetLastError();
-	ShowWindow( g_dlg, cmdShow );
+	const HRSRC dialogResourceInfo = FindResource( instance, MAKEINTRESOURCE( IDD_DIALOG1 ), "RT_DIALOG" );
+	if( dialogResourceInfo != NULL )
+	{
+		const HGLOBAL dialogResource = LoadResource( instance, dialogResourceInfo );
+		if( dialogResource == NULL )
+		{
+#ifdef _DEBUG
+			const DWORD lastError = GetLastError();
+			io::OutputMessage( "Unable to find dialog resource, error 0x%08x\n", lastError );
+#endif
+		}
+	}
+#ifdef _DEBUG
+	else
+	{
+		const DWORD lastError = GetLastError();
+		io::OutputMessage( "Unable to find dialog resource, error 0x%08x\n", lastError );
+	}
+#endif
 
-	return( g_dlg != NULL );
+	g_dialog = CreateDialog( instance, MAKEINTRESOURCE( IDD_DIALOG1 ), GetDesktopWindow(), DlgProc );
+
+#ifdef _DEBUG
+	if( g_dialog == NULL )
+	{
+		const DWORD lastError = GetLastError();
+		io::OutputMessage( "Unable to create dialog, error 0x%08x\n", lastError );
+	}
+#endif
+
+	ShowWindow( g_dialog, cmdShow );
+	UpdateWindow( g_dialog );
+
+	return( g_dialog != NULL );
 }
 
 void Run()
@@ -31,7 +60,7 @@ void Run()
 	MSG message;
 	while( GetMessage( &message, NULL, 0, 0 ) > 0 )
 	{
-		if( !IsDialogMessage( g_dlg, &message ) )
+		if( !IsDialogMessage( g_dialog, &message ) )
 		{
 			TranslateMessage( &message );
 			DispatchMessage( &message );
@@ -41,9 +70,9 @@ void Run()
 
 void Shutdown()
 {
+	DestroyWindow( g_dialog );
+	g_dialog = NULL;
 	memory::Heap::Destroy();
-}
-
 }
 
 INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
@@ -61,7 +90,7 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 					break;
 			}*/
 		case WM_CLOSE:
-			DestroyWindow( system::g_dlg );
+			DestroyWindow( g_dialog );
 			result = TRUE;
 			break;
 		case WM_DESTROY:
@@ -75,3 +104,23 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 
 	return result;
 }
+
+}
+
+#ifdef __cplusplus
+extern "C"
+{
+#pragma function(memset)
+	void* memset( void* dest, int c, size_t count )
+	{
+		char* bytes = (char*)dest;
+		while( count-- )
+		{
+			*bytes++ = (char)c;
+		}
+		return dest;
+	}
+
+	int _fltused = 0;
+}
+#endif //__cplusplus

@@ -2,36 +2,34 @@
 #include "WordleAnalyser.h"
 #include "System.h"
 
-int main()
+void WINAPI WinMainCRTStartup()
 {
-	if( !memory::Heap::Create() )
-	{
-		return false;
-	}
+	STARTUPINFO				startupInfo = { sizeof( STARTUPINFO ),0 };
 
-	LARGE_INTEGER frequency, startTime, endTime;
-	QueryPerformanceFrequency( &frequency );
-	QueryPerformanceCounter( &startTime );
-	wa::WordleAnalyser wordleAnalyser;
-	const UINT wordsRead = wordleAnalyser.Initialise();
-	QueryPerformanceCounter( &endTime );
-	const float readDuration = static_cast<float>( endTime.QuadPart - startTime.QuadPart ) * 1000.0f / static_cast<float>( frequency.QuadPart );
-	io::OutputMessage( "Initialisation with %u words took %.4fms\n", wordsRead, readDuration );
+	GetStartupInfo( &startupInfo );
 
-	wordleAnalyser.Run();
+	int Result = WinMain( GetModuleHandle( NULL ), 0, 0, startupInfo.dwFlags & STARTF_USESHOWWINDOW
+		? startupInfo.wShowWindow : SW_SHOWDEFAULT );
 
-	wordleAnalyser.Shutdown();
-
-	memory::Heap::Destroy();
-
-	return 0;
+	ExitProcess( Result );
 }
 
 int WINAPI WinMain( HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine, int cmdShow )
 {
+	UNREFERENCED_PARAMETER( prevInstance );
+
 	if( system::Initialise( instance, cmdLine, cmdShow ) )
 	{
+		wa::WordleAnalyser wordleAnalyser;
+
+		wordleAnalyser.Initialise();
+
 		system::Run();
+
+		wordleAnalyser.Run();
+
+		wordleAnalyser.Shutdown();
+
 		system::Shutdown();
 	}
 
