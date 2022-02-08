@@ -41,16 +41,18 @@ bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 
 	g_dialog = CreateDialog( instance, MAKEINTRESOURCE( IDD_DIALOG1 ), GetDesktopWindow(), DlgProc );
 
+	if( g_dialog != NULL )
+	{
+		ShowWindow( g_dialog, cmdShow );
+		UpdateWindow( g_dialog );
+	}
 #ifdef _DEBUG
-	if( g_dialog == NULL )
+	else
 	{
 		const DWORD lastError = GetLastError();
 		io::OutputMessage( "Unable to create dialog, error 0x%08x\n", lastError );
 	}
 #endif
-
-	ShowWindow( g_dialog, cmdShow );
-	UpdateWindow( g_dialog );
 
 	return( g_dialog != NULL );
 }
@@ -111,12 +113,12 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 extern "C"
 {
 #pragma function(memset)
-	void* memset( void* dest, int c, size_t count )
+	void* __cdecl memset( _Out_writes_bytes_all_( count ) void* dest, _In_ int value, _In_ size_t count )
 	{
 		char* bytes = (char*)dest;
 		while( count-- )
 		{
-			*bytes++ = (char)c;
+			*bytes++ = (char)value;
 		}
 		return dest;
 	}
