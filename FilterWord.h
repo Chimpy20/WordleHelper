@@ -5,7 +5,7 @@
 namespace wa
 {
 
-enum class FilterLetterState : unsigned char
+enum FilterLetterState
 {
 	Incorrect = 0,
 	WrongPosition,
@@ -20,7 +20,7 @@ class FilterWord : public Word
 {
 public:
 	FilterWord();
-	FilterWord( const CHAR letters[ WordLength ], const FilterLetterState filteredLetterStates[ WordLength  ] );
+	FilterWord( const CHAR letters[ WordLength ], const FilterLetterState filteredLetterStates[ WordLength ] );
 
 	FilterLetterState	GetStateAtPos( const UINT letterPosition ) const;
 

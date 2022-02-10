@@ -18,29 +18,47 @@ const CHAR testFilterLetters1[ Word::WordLength ] =
 
 const FilterLetterState testFilterLetterStates1[ Word::WordLength ] = 
 {
+	FilterLetterState::WrongPosition,
 	FilterLetterState::Incorrect,
-	FilterLetterState::Correct,
+	FilterLetterState::WrongPosition,
 	FilterLetterState::Incorrect,
-	FilterLetterState::Incorrect,
-	FilterLetterState::WrongPosition
+	FilterLetterState::Correct
 };
 
 const CHAR testFilterLetters2[ Word::WordLength ] =
 {
-	'f',
-	'l',
-	'i',
-	'e',
-	'r'
+	'a',
+	'b',
+	'u',
+	's',
+	'e'
 };
 
 const FilterLetterState testFilterLetterStates2[ Word::WordLength ] =
 {
+	FilterLetterState::WrongPosition,
 	FilterLetterState::Incorrect,
 	FilterLetterState::Correct,
-	FilterLetterState::Incorrect,
 	FilterLetterState::Correct,
 	FilterLetterState::Correct
+};
+
+const CHAR testFilterLetters3[ Word::WordLength ] =
+{
+	'p',
+	'r',
+	'o',
+	'u',
+	'd'
+};
+
+const FilterLetterState testFilterLetterStates3[ Word::WordLength ] =
+{
+	FilterLetterState::Incorrect,
+	FilterLetterState::WrongPosition,
+	FilterLetterState::WrongPosition,
+	FilterLetterState::WrongPosition,
+	FilterLetterState::Incorrect
 };
 
 WordleAnalyser::WordleAnalyser():
@@ -116,6 +134,30 @@ void WordleAnalyser::Run()
 	if (uNumFilteredWords <= 10)
 	{
 		io::OutputMessage("Filtered words are:\n");
+		filteredWords->OutputWords();
+	}
+
+	filteredWords->Guess( *filteredWords );
+
+	{
+		const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
+		containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
+		UINT wordsToDisplay = 0;
+		while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
+		{
+			const RatedWord& word = *itor;
+			io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
+			++itor;
+			++wordsToDisplay;
+		}
+	}
+	
+	uNumFilteredWords = filteredWords->Filter( FilterWord( testFilterLetters3, testFilterLetterStates3 ) );
+	io::OutputMessage( "Filtered down to %u words\n", uNumFilteredWords );
+
+	if( uNumFilteredWords <= 10 )
+	{
+		io::OutputMessage( "Filtered words are:\n" );
 		filteredWords->OutputWords();
 	}
 

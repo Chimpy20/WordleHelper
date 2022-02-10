@@ -1,11 +1,13 @@
 #include "pch.h"
 #include <CommCtrl.h>
 #include "System.h"
+#include "UI.h"
 #include "resource.h"
 
 namespace system
 {
 
+ui::UI* g_userInterface = nullptr;
 HWND g_dialog = NULL;
 
 INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam );
@@ -19,7 +21,7 @@ bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 
 	InitCommonControls();
 
-	const HRSRC dialogResourceInfo = FindResource( instance, MAKEINTRESOURCE( IDD_DIALOG1 ), "RT_DIALOG" );
+	const HRSRC dialogResourceInfo = FindResource( instance, MAKEINTRESOURCE( IDD_DIALOG1 ), RT_DIALOG );
 	if( dialogResourceInfo != NULL )
 	{
 		const HGLOBAL dialogResource = LoadResource( instance, dialogResourceInfo );
@@ -54,10 +56,13 @@ bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 	}
 #endif
 
+	g_userInterface = new ui::UI( g_dialog );
+	g_userInterface->Initialise( instance );
+
 	return( g_dialog != NULL );
 }
 
-void Run()
+UINT Run()
 {
 	MSG message;
 	while( GetMessage( &message, NULL, 0, 0 ) > 0 )
@@ -68,12 +73,21 @@ void Run()
 			DispatchMessage( &message );
 		}
 	}
+
+	return LOWORD( message.wParam );
 }
 
 void Shutdown()
 {
+	if( g_userInterface != nullptr )
+	{
+		g_userInterface->Shutdown();
+		delete g_userInterface;
+	}
+
 	DestroyWindow( g_dialog );
 	g_dialog = NULL;
+
 	memory::Heap::Destroy();
 }
 
@@ -82,25 +96,34 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 	BOOL result = FALSE;
 	switch( message )
 	{
-/*		case WM_CREATE:
-			// Initialize the window. 
+		case WM_CREATE:
+			break;
+		case WM_INITDIALOG:
+			result = TRUE;
 			break;
 		case WM_COMMAND:
-			switch( LOWORD( wParam ) )
+		{
+			WORD param = LOWORD( wParam );
+			switch( param )
 			{
+				case IDEXIT:
+					CloseWindow( wnd );
+					DestroyWindow( wnd );
+					break;
 				default:
 					break;
-			}*/
+			}
+			break;
+		}
 		case WM_CLOSE:
+			EndDialog( g_dialog, 0 );
 			DestroyWindow( g_dialog );
-			result = TRUE;
 			break;
 		case WM_DESTROY:
 			PostQuitMessage( 0 );
 			result = TRUE;
 			break;
 		default:
-			//return DefWindowProc( wnd, message, wParam, lParam );
 			break;
 	}
 
@@ -112,7 +135,7 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 #ifdef __cplusplus
 extern "C"
 {
-#pragma function(memset)
+	#pragma function(memset)
 	void* __cdecl memset( _Out_writes_bytes_all_( count ) void* dest, _In_ int value, _In_ size_t count )
 	{
 		char* bytes = (char*)dest;
