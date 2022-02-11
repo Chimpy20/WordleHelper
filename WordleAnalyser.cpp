@@ -71,18 +71,21 @@ void WordleAnalyser::Run()
 
 	const Guesser& guesser = filteredWords->GetGuesser();
 
-	filteredWords->Guess( *m_wordList );
-
+	if( m_wordList->GetNumWords() > 0 )
 	{
-		const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
-		containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
-		UINT wordsToDisplay = 0;
-		while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
+		filteredWords->Guess( *m_wordList );
+
 		{
-			const RatedWord& word = *itor;
-			io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
-			++itor;
-			++wordsToDisplay;
+			const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
+			containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
+			UINT wordsToDisplay = 0;
+			while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
+			{
+				const RatedWord& word = *itor;
+				io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
+				++itor;
+				++wordsToDisplay;
+			}
 		}
 	}
 
@@ -95,18 +98,21 @@ void WordleAnalyser::Run()
 		filteredWords->OutputWords();
 	}
 
-	filteredWords->Guess( *m_wordList );
-
+	if( m_wordList->GetNumWords() > 0 )
 	{
-		const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
-		containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
-		UINT wordsToDisplay = 0;
-		while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
+		filteredWords->Guess( *m_wordList );
+
 		{
-			const RatedWord& word = *itor;
-			io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
-			++itor;
-			++wordsToDisplay;
+			const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
+			containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
+			UINT wordsToDisplay = 0;
+			while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
+			{
+				const RatedWord& word = *itor;
+				io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
+				++itor;
+				++wordsToDisplay;
+			}
 		}
 	}
 
@@ -119,18 +125,21 @@ void WordleAnalyser::Run()
 		filteredWords->OutputWords();
 	}
 
-	filteredWords->Guess( *filteredWords );
-
+	if( m_wordList->GetNumWords() > 0 )
 	{
-		const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
-		containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
-		UINT wordsToDisplay = 0;
-		while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
+		filteredWords->Guess( *filteredWords );
+
 		{
-			const RatedWord& word = *itor;
-			io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
-			++itor;
-			++wordsToDisplay;
+			const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
+			containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
+			UINT wordsToDisplay = 0;
+			while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
+			{
+				const RatedWord& word = *itor;
+				io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
+				++itor;
+				++wordsToDisplay;
+			}
 		}
 	}
 
