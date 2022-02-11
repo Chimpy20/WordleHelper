@@ -10,37 +10,37 @@ const WCHAR* const WordleAnalyser::WORD_LIST_FILENAME = L"wordlist.txt";
 const CHAR testFilterLetters1[ Word::WordLength ] =
 {
 	's',
-	'l',
 	'a',
-	't',
-	'e'
+	'u',
+	'c',
+	'y'
 };
 
 const FilterLetterState testFilterLetterStates1[ Word::WordLength ] = 
 {
-	FilterLetterState::WrongPosition,
+	FilterLetterState::Incorrect,
 	FilterLetterState::Incorrect,
 	FilterLetterState::WrongPosition,
-	FilterLetterState::Incorrect,
-	FilterLetterState::Correct
+	FilterLetterState::WrongPosition,
+	FilterLetterState::Incorrect
 };
 
 const CHAR testFilterLetters2[ Word::WordLength ] =
 {
-	'a',
-	'b',
+	'c',
 	'u',
-	's',
+	't',
+	'i',
 	'e'
 };
 
 const FilterLetterState testFilterLetterStates2[ Word::WordLength ] =
 {
 	FilterLetterState::WrongPosition,
+	FilterLetterState::WrongPosition,
 	FilterLetterState::Incorrect,
-	FilterLetterState::Correct,
-	FilterLetterState::Correct,
-	FilterLetterState::Correct
+	FilterLetterState::Incorrect,
+	FilterLetterState::WrongPosition
 };
 
 const CHAR testFilterLetters3[ Word::WordLength ] =

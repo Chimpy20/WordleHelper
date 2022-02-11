@@ -104,6 +104,7 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 		case WM_COMMAND:
 		{
 			WORD param = LOWORD( wParam );
+			DEBUG_MESSAGE( "WM_COMMAND wParam = %u, lParam = %u\n", LOWORD( wParam ), lParam );
 			switch( param )
 			{
 				case IDEXIT:
@@ -113,6 +114,8 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 				default:
 					break;
 			}
+			if( g_userInterface != nullptr )
+				g_userInterface->OnCommand( wParam, lParam );
 			break;
 		}
 		case WM_CLOSE:

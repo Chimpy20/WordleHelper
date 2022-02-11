@@ -11,8 +11,10 @@
 #define IDB_FILTERSTATE3                9
 #define IDB_FILTERSTATE4                10
 #define IDD_DIALOG1                     101
-#define IDI_ICON1                       107
 #define IDB_BLOCKGREEN                  109
+#define IDB_YELLOW                      110
+#define IDB_BLOCKYELLOW                 110
+#define IDB_BLOCKGREY                   111
 #define IDC_EDIT1                       1001
 #define IDC_OUTPUT                      1001
 #define IDC_LETTER0                     1002
@@ -26,7 +28,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        110
+#define _APS_NEXT_RESOURCE_VALUE        112
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1008
 #define _APS_NEXT_SYMED_VALUE           101
