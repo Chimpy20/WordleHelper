@@ -8,7 +8,7 @@ namespace wa
 const float		RatedWord::CorrectLetterScore = 0.5f;
 const float		RatedWord::WrongPositionScore = 0.25f;
 const float		RatedWord::MultipleLetterPenalty = 1.0f;
-const float		RatedWord::IncorrectLetterBonus = 0.05f;
+const float		RatedWord::IncorrectLetterBonus = 0.25f;
 
 RatedWord::RatedWord():
 	m_rating( 1.0f )

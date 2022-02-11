@@ -184,8 +184,11 @@ void WordList::OutputWords() const
 
 void WordList::Guess( const WordList& masterWordList )
 {
-	m_analysis.Analyse();
-	m_guesser.Guess( masterWordList, m_analysis );
+	if( m_wordList.size() > 0 )
+	{
+		m_analysis.Analyse();
+		m_guesser.Guess( masterWordList, m_analysis );
+	}
 }
 
 }

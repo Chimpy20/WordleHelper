@@ -132,10 +132,13 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon1.ico">
+    <Image Include="Green.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Green.bmp">
+    <Image Include="Yellow.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grey.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

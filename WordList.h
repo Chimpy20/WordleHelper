@@ -26,7 +26,7 @@ public:
 
 	UINT					GetNumWords() const
 	{
-		return m_wordList.size();
+		return static_cast<UINT>( m_wordList.size() );
 	}
 
 	const Analysis&			GetAnalysis() const

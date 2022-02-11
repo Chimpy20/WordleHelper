@@ -23,14 +23,21 @@ public:
 
 	void						Reset();
 
+	bool						OnCommand( const WPARAM wParam, const LPARAM lParam );
+
 private:
 	class LetterInfo
 	{
 	public:
 		wa::FilterLetterState	m_filterLetterState = wa::FilterLetterState::Incorrect;
+		CHAR					m_letter = '\0';
 	};
 
+	UINT						GetLetterIndexFromEditControlID( const UINT editControlID );
+	void						RefreshFilterStateButtons();
+
 	HWND						m_dialogHandle;
+	HBITMAP						m_letterStateBitmapHandles[ wa::FilterLetterState::NumEntries ];
 	LetterInfo					m_letterInfo[ wa::Word::WordLength ];
 };
 
