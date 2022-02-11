@@ -7,7 +7,9 @@ namespace utils
 static unsigned int randSeed = 0;
 unsigned int Rand()
 {
-	return( ( randSeed++ * 1103515245u ) + 12345 );
+	SYSTEMTIME time{};
+	GetSystemTime( &time );
+	return( ( randSeed++ * 1103515245u ) + 12345 + time.wMinute * 60 + time.wSecond );
 }
 
 LARGE_INTEGER g_startTime = LARGE_INTEGER(0u);

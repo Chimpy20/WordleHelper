@@ -24,6 +24,11 @@ public:
 		return m_wordList;
 	}
 
+	UINT					GetNumWords() const
+	{
+		return m_wordList.size();
+	}
+
 	const Analysis&			GetAnalysis() const
 	{
 		return m_analysis;

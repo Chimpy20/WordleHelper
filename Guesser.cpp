@@ -15,12 +15,14 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 {
 	utils::StartTimer();
 
+
 	 // Clear the resultant list is case this is not the first time of running
 	m_ratedWordList.clear();
 
 	const WordListContainer& wordListContainer = m_wordList.GetWordList();
 	const WordListContainer& masterWordListContainer = masterWordList.GetWordList();
 
+	ASSERT( wordListContainer.size() > 0, "There are no words in the word list the guesser is using\n" );
 	ASSERT( masterWordListContainer.size() >= 1, "Too few words in master list\n" );
 	const float masterWordsDivisor = static_cast<float>( masterWordListContainer.size() - 1 );
 
