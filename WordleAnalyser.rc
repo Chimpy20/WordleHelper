@@ -50,15 +50,29 @@ END
 // Dialog
 //
 
-IDD_DIALOG1 DIALOGEX 0, 0, 311, 175
+IDD_DIALOG1 DIALOGEX 0, 0, 311, 223
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "Wordle Analyser"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,198,154,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,254,154,50,14
-    EDITTEXT        IDC_OUTPUT,7,46,297,98,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_LETTER0,7,17,14,14,ES_UPPERCASE | ES_AUTOHSCROLL
+    EDITTEXT        IDC_LETTER1,26,17,14,14,ES_UPPERCASE | ES_AUTOHSCROLL
+    EDITTEXT        IDC_LETTER2,45,17,14,14,ES_UPPERCASE | ES_AUTOHSCROLL
+    EDITTEXT        IDC_LETTER3,64,17,14,14,ES_UPPERCASE | ES_AUTOHSCROLL
+    EDITTEXT        IDC_LETTER4,83,17,14,14,ES_UPPERCASE | ES_AUTOHSCROLL
+    PUSHBUTTON      "Letter",IDB_FILTERSTATE0,7,37,14,14,BS_BITMAP | BS_FLAT
+	PUSHBUTTON      "Letter",IDB_FILTERSTATE1, 26, 37, 14, 14, BS_BITMAP | BS_FLAT
+	PUSHBUTTON      "Letter",IDB_FILTERSTATE2, 45, 37, 14, 14, BS_BITMAP | BS_FLAT
+	PUSHBUTTON      "Letter",IDB_FILTERSTATE3, 64, 37, 14, 14, BS_BITMAP | BS_FLAT
+	PUSHBUTTON      "Letter",IDB_FILTERSTATE4, 83, 37, 14, 14, BS_BITMAP | BS_FLAT
+    PUSHBUTTON      "Guess",IDC_GUESS,192,34,54,14,BS_FLAT
+    PUSHBUTTON      "Reset",IDB_RESET,254,34,50,14,BS_FLAT
+    EDITTEXT        IDC_OUTPUT,7,98,297,98,ES_AUTOHSCROLL | ES_READONLY | NOT WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,107,202,50,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Cancel",IDCANCEL,165,202,50,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Exit",IDEXIT,254,202,50,14,BS_FLAT
+    LTEXT           "Your guess:",IDC_STATIC,7,6,59,10
 END
 
 
@@ -75,7 +89,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 304
         TOPMARGIN, 6
-        BOTTOMMARGIN, 168
+        BOTTOMMARGIN, 216
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -104,47 +118,20 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Dialog
+// Icon
 //
 
-IDD_DIALOG2 DIALOGEX 0, 0, 309, 176
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Dialog"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,198,155,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,252,155,50,14
-END
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "icon1.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// DESIGNINFO
+// Bitmap
 //
 
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO
-BEGIN
-    IDD_DIALOG2, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 302
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 169
-    END
-END
-#endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// AFX_DIALOG_LAYOUT
-//
-
-IDD_DIALOG2 AFX_DIALOG_LAYOUT
-BEGIN
-    0
-END
+IDB_BLOCKGREEN          BITMAP                  "Green.bmp"
 
 #endif    // English (United Kingdom) resources
 /////////////////////////////////////////////////////////////////////////////

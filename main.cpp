@@ -6,6 +6,8 @@ int WINAPI WinMain( _In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _I
 {
 	UNREFERENCED_PARAMETER( prevInstance );
 
+	UINT programResult = 0;
+
 	// Start up any platform related systems and begin the program
 	if( system::Initialise( instance, cmdLine, cmdShow ) )
 	{
@@ -14,9 +16,10 @@ int WINAPI WinMain( _In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _I
 		wordleAnalyser.Initialise();
 
 		// Perform the main loop until we exit the program
-		system::Run();
+		programResult = system::Run();
 
-		wordleAnalyser.Run();
+		// TODO: Remove this line
+		//wordleAnalyser.Run();
 
 		wordleAnalyser.Shutdown();
 
@@ -24,7 +27,7 @@ int WINAPI WinMain( _In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _I
 		system::Shutdown();
 	}
 
-	return 0;
+	return programResult;
 }
 
 void WINAPI WinMainCRTStartup()

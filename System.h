@@ -4,7 +4,7 @@ namespace system
 {
 
 bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow );
-void Run();
+UINT Run();
 void Shutdown();
 
 }
