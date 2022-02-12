@@ -6,7 +6,7 @@
 namespace wa
 {
 
-Guesser::Guesser( const WordList& wordList ):
+Guesser::Guesser( const WordList& wordList ) :
 	m_wordList( wordList )
 {
 }
@@ -15,8 +15,7 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 {
 	utils::StartTimer();
 
-
-	 // Clear the resultant list is case this is not the first time of running
+	// Clear the resultant list is case this is not the first time of running
 	m_ratedWordList.clear();
 
 	const WordListContainer& wordListContainer = m_wordList.GetWordList();
@@ -24,7 +23,10 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 
 	ASSERT( wordListContainer.size() > 0, "There are no words in the word list the guesser is using\n" );
 	ASSERT( masterWordListContainer.size() >= 1, "Too few words in master list\n" );
-	const float masterWordsDivisor = static_cast<float>( masterWordListContainer.size() - 1 );
+	if( masterWordListContainer.size() == 0 )
+		return;
+
+	const float masterWordsDivisor = static_cast<float>( masterWordListContainer.size() );
 
 	// Examine each word which could be used to most effictively reduce down the number of possibilities
 	// even if it might not be a solution
@@ -61,7 +63,12 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 
 	m_ratedWordList.sort();
 
-	utils::EndTimer( "Guess");
+	utils::EndTimer( "Guess" );
+}
+
+void Guesser::Reset()
+{
+	m_ratedWordList.clear();
 }
 
 }

@@ -15,11 +15,12 @@ int WINAPI WinMain( _In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _I
 
 		wordleAnalyser.Initialise();
 
+		system::LinkHelper( wordleAnalyser );
+
 		// Perform the main loop until we exit the program
 		programResult = system::Run();
 
-		// TODO: Remove this line
-		//wordleAnalyser.Run();
+		system::UnlinkHelper();
 
 		wordleAnalyser.Shutdown();
 

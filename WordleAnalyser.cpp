@@ -7,62 +7,9 @@ namespace wa
 
 const WCHAR* const WordleAnalyser::WORD_LIST_FILENAME = L"wordlist.txt";
 
-const CHAR testFilterLetters1[ Word::WordLength ] =
-{
-	's',
-	'a',
-	'u',
-	'c',
-	'y'
-};
-
-const FilterLetterState testFilterLetterStates1[ Word::WordLength ] = 
-{
-	FilterLetterState::Incorrect,
-	FilterLetterState::Incorrect,
-	FilterLetterState::WrongPosition,
-	FilterLetterState::WrongPosition,
-	FilterLetterState::Incorrect
-};
-
-const CHAR testFilterLetters2[ Word::WordLength ] =
-{
-	'c',
-	'u',
-	't',
-	'i',
-	'e'
-};
-
-const FilterLetterState testFilterLetterStates2[ Word::WordLength ] =
-{
-	FilterLetterState::WrongPosition,
-	FilterLetterState::WrongPosition,
-	FilterLetterState::Incorrect,
-	FilterLetterState::Incorrect,
-	FilterLetterState::WrongPosition
-};
-
-const CHAR testFilterLetters3[ Word::WordLength ] =
-{
-	'p',
-	'r',
-	'o',
-	'u',
-	'd'
-};
-
-const FilterLetterState testFilterLetterStates3[ Word::WordLength ] =
-{
-	FilterLetterState::Incorrect,
-	FilterLetterState::WrongPosition,
-	FilterLetterState::WrongPosition,
-	FilterLetterState::WrongPosition,
-	FilterLetterState::Incorrect
-};
-
 WordleAnalyser::WordleAnalyser():
-	m_wordList( nullptr )
+	m_masterWordList( nullptr ),
+	m_filteredWords( nullptr )
 {
 }
 
@@ -72,111 +19,32 @@ WordleAnalyser::~WordleAnalyser()
 
 UINT WordleAnalyser::Initialise()
 {
-	m_wordList = new WordList();
-	const UINT wordsRead = m_wordList->ReadWords( WORD_LIST_FILENAME, false );
-	m_wordList->Randomise();
+	m_masterWordList = new WordList();
+	const UINT wordsRead = m_masterWordList->ReadWords( WORD_LIST_FILENAME, false );
+	m_masterWordList->Randomise();
+
+	m_filteredWords = new WordList();
+
+	Reset();
 
 	return wordsRead;
 }
 
-void WordleAnalyser::Run()
+UINT WordleAnalyser::FilterAndGuess( const FilterWord& filterWord )
 {
-	ASSERT( m_wordList != nullptr, "Word list doesn't exist\n" );
+	UINT numFilteredWords = 0;
+	numFilteredWords = m_filteredWords->Filter( filterWord );
+	io::OutputMessage( "Filtered down to %u words\n", numFilteredWords );
 
-	// Create a word list that is a copy of the list of possible solutions
-	WordList* const filteredWords = new WordList();
-	filteredWords->DuplicateFrom( *m_wordList );
-
-	const Guesser& guesser = filteredWords->GetGuesser();
-
-	if( m_wordList->GetNumWords() > 0 )
+	const WordList* const wordListToUseForGuess = ( m_filteredWords->GetNumWords() > 24 ) ? m_masterWordList : m_filteredWords;
+	if( wordListToUseForGuess->GetNumWords() > 0 )
 	{
-		filteredWords->Guess( *m_wordList );
+		const containers::List<RatedWord>& ratedWordList = m_filteredWords->Guess( *wordListToUseForGuess );
 
-		{
-			const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
-			containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
-			UINT wordsToDisplay = 0;
-			while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
-			{
-				const RatedWord& word = *itor;
-				io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
-				++itor;
-				++wordsToDisplay;
-			}
-		}
-	}
-
-	UINT uNumFilteredWords = filteredWords->Filter(FilterWord(testFilterLetters1, testFilterLetterStates1));
-	io::OutputMessage("Filtered down to %u words\n", uNumFilteredWords);
-
-	if (uNumFilteredWords <= 10)
-	{
-		io::OutputMessage("Filtered words are:\n");
-		filteredWords->OutputWords();
-	}
-
-	if( m_wordList->GetNumWords() > 0 )
-	{
-		filteredWords->Guess( *m_wordList );
-
-		{
-			const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
-			containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
-			UINT wordsToDisplay = 0;
-			while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
-			{
-				const RatedWord& word = *itor;
-				io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
-				++itor;
-				++wordsToDisplay;
-			}
-		}
-	}
-
-	uNumFilteredWords = filteredWords->Filter(FilterWord(testFilterLetters2, testFilterLetterStates2));
-	io::OutputMessage("Filtered down to %u words\n", uNumFilteredWords);
-
-	if (uNumFilteredWords <= 10)
-	{
-		io::OutputMessage("Filtered words are:\n");
-		filteredWords->OutputWords();
-	}
-
-	if( m_wordList->GetNumWords() > 0 )
-	{
-		filteredWords->Guess( *filteredWords );
-
-		{
-			const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
-			containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
-			UINT wordsToDisplay = 0;
-			while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
-			{
-				const RatedWord& word = *itor;
-				io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
-				++itor;
-				++wordsToDisplay;
-			}
-		}
-	}
-	
-	uNumFilteredWords = filteredWords->Filter( FilterWord( testFilterLetters3, testFilterLetterStates3 ) );
-	io::OutputMessage( "Filtered down to %u words\n", uNumFilteredWords );
-
-	if( uNumFilteredWords <= 10 )
-	{
-		io::OutputMessage( "Filtered words are:\n" );
-		filteredWords->OutputWords();
-	}
-
-	filteredWords->Guess( *filteredWords );
-
-	{
-		const containers::List<RatedWord>& ratedWordList = guesser.GetRatedWordList();
+		io::OutputMessage( "Best guesses are:\n" );
 		containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
 		UINT wordsToDisplay = 0;
-		while( itor != ratedWordList.end() && ( wordsToDisplay < 5 ) )
+		while( itor != ratedWordList.end() && ( wordsToDisplay < 3 ) )
 		{
 			const RatedWord& word = *itor;
 			io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
@@ -185,12 +53,31 @@ void WordleAnalyser::Run()
 		}
 	}
 
-	delete filteredWords;
+	return numFilteredWords;
+}
+
+void WordleAnalyser::Reset()
+{
+	ASSERT( m_masterWordList != nullptr, "Word list doesn't exist\n" );
+
+	// Create a word list that is a copy of the list of possible solutions
+	ASSERT( m_filteredWords != nullptr, "Filtered word list doesn't exist\n" );
+	m_filteredWords->DuplicateFrom( *m_masterWordList );
 }
 
 void WordleAnalyser::Shutdown()
 {
-	delete m_wordList;
+	if( m_filteredWords != nullptr )
+	{
+		delete m_filteredWords;
+		m_filteredWords = nullptr;
+	}
+
+	if( m_masterWordList != nullptr )
+	{
+		delete m_masterWordList;
+		m_masterWordList = nullptr;
+	}
 }
 
 }

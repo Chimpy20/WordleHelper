@@ -14,7 +14,8 @@ public:
 	// Setup the analyser
 	UINT				Initialise();
 
-	
+	UINT				FilterAndGuess( const FilterWord& filterWord );
+	void				Reset();
 	void				Run();
 
 	// Close down the analyser
@@ -24,7 +25,8 @@ private:
 	static const WCHAR* const WORD_LIST_FILENAME;
 
 	// The list of all possible solutions
-	WordList*			m_wordList;
+	WordList*			m_masterWordList;
+	WordList*			m_filteredWords;
 };
 
 } // namespace wa

@@ -12,7 +12,6 @@
 #define IDB_FILTERSTATE4                10
 #define IDD_DIALOG1                     101
 #define IDB_BLOCKGREEN                  109
-#define IDB_YELLOW                      110
 #define IDB_BLOCKYELLOW                 110
 #define IDB_BLOCKGREY                   111
 #define IDC_EDIT1                       1001
@@ -23,6 +22,7 @@
 #define IDC_LETTER3                     1005
 #define IDC_LETTER4                     1006
 #define IDC_GUESS                       1007
+#define IDB_GUESS                       1007
 
 // Next default values for new objects
 // 

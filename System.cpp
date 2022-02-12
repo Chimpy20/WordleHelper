@@ -3,6 +3,7 @@
 #include "System.h"
 #include "UI.h"
 #include "resource.h"
+#include "WordleAnalyser.h"
 
 namespace system
 {
@@ -62,6 +63,16 @@ bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 	return( g_dialog != NULL );
 }
 
+void LinkHelper( wa::WordleAnalyser& helper )
+{
+	g_userInterface->LinkHelper( helper );
+}
+
+void UnlinkHelper()
+{
+	g_userInterface->UnlinkHelper();
+}
+
 UINT Run()
 {
 	MSG message;
@@ -104,7 +115,7 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 		case WM_COMMAND:
 		{
 			WORD param = LOWORD( wParam );
-			DEBUG_MESSAGE( "WM_COMMAND wParam = %u, lParam = %u\n", LOWORD( wParam ), lParam );
+			//DEBUG_MESSAGE( "WM_COMMAND wParam = %u, lParam = %u\n", LOWORD( wParam ), lParam );
 			switch( param )
 			{
 				case IDEXIT:
