@@ -2,6 +2,11 @@
 
 #include "FilterWord.h"
 
+namespace wa
+{
+class WordleAnalyser;
+}
+
 namespace system
 {
 
@@ -11,19 +16,23 @@ namespace ui
 class UI
 {
 public:
-	static DWORD				LetterEditControlIDs[ wa::Word::WordLength ];
-	static DWORD				ButtonFilterControlIDs[ wa::Word::WordLength ];
-	static DWORD				ButtonFilterImageIDs[ wa::FilterLetterState::NumEntries ];
+	static UINT					LetterEditControlIDs[ wa::Word::WordLength ];
+	static UINT					ButtonFilterControlIDs[ wa::Word::WordLength ];
+	static UINT					ButtonFilterImageIDs[ wa::FilterLetterState::NumEntries ];
 
 	UI( const HWND dialogHandle );
 	~UI();
 
 	bool						Initialise( const HINSTANCE instance );
+	void						LinkHelper( wa::WordleAnalyser& helper );
+	void						UnlinkHelper();
 	void						Shutdown();
 
 	void						Reset();
 
 	bool						OnCommand( const WPARAM wParam, const LPARAM lParam );
+
+	void						Guess();
 
 private:
 	class LetterInfo
@@ -38,7 +47,8 @@ private:
 
 	HWND						m_dialogHandle;
 	HBITMAP						m_letterStateBitmapHandles[ wa::FilterLetterState::NumEntries ];
-	LetterInfo					m_letterInfo[ wa::Word::WordLength ];
+	LetterInfo					m_letterInfo[ wa::Word::WordLength ]{};
+	wa::WordleAnalyser*			m_helper;
 };
 
 } // namespace ui

@@ -57,7 +57,7 @@ public:
 
 	// Use the guesser object to produce a list of weighted words which may be solutions
 	// @param masterWordList: the complete list of words - not the filtered down ones
-	void					Guess( const WordList& masterWordList );
+	const containers::List<RatedWord>& Guess( const WordList& masterWordList );
 
 	// Output the words in the list
 	void					OutputWords() const;

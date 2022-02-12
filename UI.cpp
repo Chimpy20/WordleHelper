@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UI.h"
 #include "resource.h"
+#include "WordleAnalyser.h"
 
 namespace system
 {
@@ -8,7 +9,7 @@ namespace system
 namespace ui
 {
 
-DWORD UI::LetterEditControlIDs[ wa::Word::WordLength ] =
+UINT UI::LetterEditControlIDs[ wa::Word::WordLength ] =
 {
 	IDC_LETTER0,
 	IDC_LETTER1,
@@ -17,7 +18,7 @@ DWORD UI::LetterEditControlIDs[ wa::Word::WordLength ] =
 	IDC_LETTER4
 };
 
-DWORD UI::ButtonFilterControlIDs[ wa::Word::WordLength ] =
+UINT UI::ButtonFilterControlIDs[ wa::Word::WordLength ] =
 {
 	IDB_FILTERSTATE0,
 	IDB_FILTERSTATE1,
@@ -26,7 +27,7 @@ DWORD UI::ButtonFilterControlIDs[ wa::Word::WordLength ] =
 	IDB_FILTERSTATE4
 };
 
-DWORD UI::ButtonFilterImageIDs[ wa::FilterLetterState::NumEntries ] =
+UINT UI::ButtonFilterImageIDs[ wa::FilterLetterState::NumEntries ] =
 {
 	IDB_BLOCKGREY,
 	IDB_BLOCKYELLOW,
@@ -34,7 +35,9 @@ DWORD UI::ButtonFilterImageIDs[ wa::FilterLetterState::NumEntries ] =
 };
 
 UI::UI( const HWND dialogHandle ):
-	m_dialogHandle( dialogHandle )
+	m_dialogHandle( dialogHandle ),
+	m_letterStateBitmapHandles{NULL},
+	m_helper(nullptr)
 {
 }
 
@@ -65,6 +68,16 @@ bool UI::Initialise( const HINSTANCE instance )
 	return true;
 }
 
+void UI::LinkHelper( wa::WordleAnalyser& helper )
+{
+	m_helper = &helper;
+}
+
+void UI::UnlinkHelper()
+{
+	m_helper = nullptr;
+}
+
 void UI::Shutdown()
 {
 }
@@ -74,6 +87,11 @@ void UI::Reset()
 	for( UINT letterEditControlIndex = 0; letterEditControlIndex < wa::Word::WordLength; ++letterEditControlIndex )
 	{
 		SetDlgItemText( m_dialogHandle, LetterEditControlIDs[ letterEditControlIndex ], "" );
+	}
+
+	if( m_helper != nullptr )
+	{
+		m_helper->Reset();
 	}
 }
 
@@ -111,6 +129,18 @@ bool UI::OnCommand( const WPARAM wParam, const LPARAM lParam )
 		}
 	}
 
+	switch( LOWORD( wParam ) )
+	{
+		case IDB_RESET:
+			Reset();
+			break;
+		case IDB_GUESS:
+			Guess();
+			break;
+		default:
+			break;
+	}
+
 	return true;
 }
 
@@ -139,6 +169,24 @@ void UI::RefreshFilterStateButtons()
 			const wa::FilterLetterState letterFilterState = m_letterInfo[ letterIndex ].m_filterLetterState;
 			SendMessage( buttonHandle, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)m_letterStateBitmapHandles[ letterFilterState ] );
 		}
+	}
+}
+
+void UI::Guess()
+{
+	CHAR letters[ wa::Word::WordLength ];
+	wa::FilterLetterState letterFilterStates[ wa::Word::WordLength ];
+
+	for( UINT letterIndex = 0; letterIndex < wa::Word::WordLength; ++letterIndex )
+	{
+		letters[ letterIndex ] = m_letterInfo[ letterIndex ].m_letter;
+		letterFilterStates[ letterIndex ] = m_letterInfo[ letterIndex ].m_filterLetterState;
+	}
+	
+	wa::FilterWord filterWord( letters, letterFilterStates );
+	if( m_helper != nullptr )
+	{
+		m_helper->FilterAndGuess( filterWord );
 	}
 }
 

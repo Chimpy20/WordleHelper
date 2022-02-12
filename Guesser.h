@@ -29,6 +29,8 @@ public:
 		return m_ratedWordList;
 	}
 
+	void						Reset();
+
 private:
 	const WordList&				m_wordList; // The (possibly filtered down) list of words, one of which is the solution
 	containers::List<RatedWord>	m_ratedWordList; // Filled in with rated words, sorted by suitability

@@ -4,15 +4,11 @@
 namespace wa
 {
 
-FilterWord::FilterWord()
-{
-}
-
 FilterWord::FilterWord( const CHAR letters[ WordLength ], const FilterLetterState filteredLetterStates[ WordLength ] )
 {
 	for( UINT letterIndex = 0; letterIndex < WordLength; ++letterIndex )
 	{
-		m_letters[ letterIndex ] = letters[ letterIndex ];
+		m_letters[ letterIndex ] = MakeLower( letters[ letterIndex ] );
 		m_filterLetterStates[ letterIndex ] = filteredLetterStates[ letterIndex ];
 	}
 }

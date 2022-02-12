@@ -140,6 +140,7 @@ bool WordList::IsLetterAlpha( const CHAR letter )
 
 UINT WordList::DuplicateFrom( const WordList& other )
 {
+	m_wordList.clear();
 	const WordListContainer& sourceWordList = other.m_wordList;
 	WordListContainer::const_iterator itor = sourceWordList.begin();
 	while( itor != sourceWordList.end() )
@@ -182,13 +183,15 @@ void WordList::OutputWords() const
 	}
 }
 
-void WordList::Guess( const WordList& masterWordList )
+const containers::List<RatedWord>& WordList::Guess( const WordList& masterWordList )
 {
+	m_guesser.Reset();
 	if( m_wordList.size() > 0 )
 	{
 		m_analysis.Analyse();
 		m_guesser.Guess( masterWordList, m_analysis );
 	}
+	return m_guesser.GetRatedWordList();
 }
 
 }

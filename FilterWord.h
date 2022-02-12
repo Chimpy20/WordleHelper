@@ -19,7 +19,7 @@ enum FilterLetterState
 class FilterWord : public Word
 {
 public:
-	FilterWord();
+	//FilterWord();
 	FilterWord( const CHAR letters[ WordLength ], const FilterLetterState filteredLetterStates[ WordLength ] );
 
 	FilterLetterState	GetStateAtPos( const UINT letterPosition ) const;
