@@ -14,7 +14,8 @@ public:
 	// Setup the analyser
 	UINT				Initialise();
 
-	UINT				FilterAndGuess( const FilterWord& filterWord );
+	void				Guess();
+	UINT				Filter( const FilterWord& filterWord );
 	void				Reset();
 	void				Run();
 

@@ -75,6 +75,8 @@ void UnlinkHelper()
 
 UINT Run()
 {
+	g_userInterface->PostInitialise();
+
 	MSG message;
 	while( GetMessage( &message, NULL, 0, 0 ) > 0 )
 	{

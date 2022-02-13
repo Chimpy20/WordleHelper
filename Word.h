@@ -34,19 +34,23 @@ public:
 		return false;
 	}
 	// Get the letter at a given position in the word
-	CHAR			GetLetterAtPosition( const UINT position ) const;
+	inline CHAR			GetLetterAtPosition( const UINT position ) const
+	{
+		ASSERT( position < WordLength, "Letter position out of range\n" );
+		return m_letters[ position ];
+	}
 
 	// Access the word as a c-style string
-	const CHAR*		GetAsString() const
+	const CHAR*			GetAsString() const
 	{
 		return m_letters;
 	}
 
 protected:
 	// Internal function to make the letters all lower case
-	static CHAR		MakeLower( CHAR letter );
+	static CHAR			MakeLower( CHAR letter );
 
-	CHAR			m_letters[ WordLength + 1 ] = { '\0' }; // The letters in the word as a c-style array
+	CHAR				m_letters[ WordLength + 1 ] = { '\0' }; // The letters in the word as a c-style array
 };
 
 } // namespace wa

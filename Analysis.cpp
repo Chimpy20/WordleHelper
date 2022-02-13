@@ -15,11 +15,14 @@ void Analysis::Analyse()
 {
 	utils::StartTimer();
 
-	const UINT numEntries = NumLetters * Word::WordLength;
-	LetterRankInfo* entriesBase = &( m_letterRanksPerPosition[ 0 ][ 0 ] );
-	for( UINT entry = 0; entry < numEntries; ++entry )
+
+	for( UINT letterWordIndex = 0; letterWordIndex < Word::WordLength; ++letterWordIndex )
 	{
-		entriesBase->Reset();
+		for( UINT letterIndex = 0; letterIndex < NumLetters; ++letterIndex )
+		{
+			m_letterRanksPerPosition[ letterIndex ][ letterWordIndex ].Reset();
+			m_letterRanksPerPosition[ letterIndex ][ letterWordIndex ].m_letter = static_cast<CHAR>( FirstLetterOffset + letterIndex );
+		}
 	}
 	
 	const containers::List<Word>& wordList = m_wordList.GetWordList();
@@ -37,11 +40,6 @@ void Analysis::Analyse()
 
 	for( UINT letterWordIndex = 0; letterWordIndex < Word::WordLength; ++letterWordIndex)
 	{
-		for( UINT letterIndex = 0; letterIndex < NumLetters; ++letterIndex )
-		{
-			m_letterRanksPerPosition[ letterIndex ][ letterWordIndex ].m_letter = static_cast<CHAR>( FirstLetterOffset + letterIndex );
-		}
-
 		// Sort the letters
 		UINT highestCount = 0;
 		for( UINT letterIndex = 0; letterIndex < NumLetters; ++letterIndex )
@@ -64,6 +62,7 @@ void Analysis::Analyse()
 			m_letterRanksPerPosition[ letterIndex ][ letterWordIndex ] = swap;
 		}
 
+		ASSERT( highestCount > 0, "There is no highest count\n" );
 		for( UINT letterIndex = 0; letterIndex < NumLetters; ++letterIndex )
 		{
 			m_letterRanksPerPosition[ letterIndex ][ letterWordIndex ].m_weight = static_cast<float>( m_letterRanksPerPosition[ letterIndex ][ letterWordIndex ].m_count ) / static_cast<float>( highestCount );

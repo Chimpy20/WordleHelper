@@ -24,6 +24,7 @@ public:
 	~UI();
 
 	bool						Initialise( const HINSTANCE instance );
+	void						PostInitialise();
 	void						LinkHelper( wa::WordleAnalyser& helper );
 	void						UnlinkHelper();
 	void						Shutdown();
@@ -38,6 +39,11 @@ private:
 	class LetterInfo
 	{
 	public:
+		void Reset()
+		{
+			m_filterLetterState = wa::FilterLetterState::Incorrect;
+			m_letter = '\0';
+		}
 		wa::FilterLetterState	m_filterLetterState = wa::FilterLetterState::Incorrect;
 		CHAR					m_letter = '\0';
 	};
