@@ -30,13 +30,18 @@ UINT WordleAnalyser::Initialise()
 	return wordsRead;
 }
 
-UINT WordleAnalyser::FilterAndGuess( const FilterWord& filterWord )
+UINT WordleAnalyser::Filter( const FilterWord& filterWord )
 {
 	UINT numFilteredWords = 0;
 	numFilteredWords = m_filteredWords->Filter( filterWord );
 	io::OutputMessage( "Filtered down to %u words\n", numFilteredWords );
 
-	const WordList* const wordListToUseForGuess = ( m_filteredWords->GetNumWords() > 24 ) ? m_masterWordList : m_filteredWords;
+	return numFilteredWords;
+}
+
+void WordleAnalyser::Guess()
+{
+	const WordList* const wordListToUseForGuess = ( m_filteredWords->GetNumWords() > 128 ) ? m_masterWordList : m_filteredWords;
 	if( wordListToUseForGuess->GetNumWords() > 0 )
 	{
 		const containers::List<RatedWord>& ratedWordList = m_filteredWords->Guess( *wordListToUseForGuess );
@@ -52,8 +57,6 @@ UINT WordleAnalyser::FilterAndGuess( const FilterWord& filterWord )
 			++wordsToDisplay;
 		}
 	}
-
-	return numFilteredWords;
 }
 
 void WordleAnalyser::Reset()
@@ -62,7 +65,9 @@ void WordleAnalyser::Reset()
 
 	// Create a word list that is a copy of the list of possible solutions
 	ASSERT( m_filteredWords != nullptr, "Filtered word list doesn't exist\n" );
-	m_filteredWords->DuplicateFrom( *m_masterWordList );
+	const UINT numWords = m_filteredWords->DuplicateFrom( *m_masterWordList );
+
+	io::OutputMessage( "There are %u words\n", numWords );
 }
 
 void WordleAnalyser::Shutdown()

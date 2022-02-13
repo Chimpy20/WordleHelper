@@ -159,6 +159,7 @@ UINT WordList::Filter( const FilterWord& filterWord )
 	while( itor != m_wordList.end() )
 	{
 		Word word = *itor;
+		// TODO - check the word is valid
 		if( !filterWord.PotentialMatch( word ) )
 		{
 			itor = m_wordList.erase( itor );

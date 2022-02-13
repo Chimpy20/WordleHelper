@@ -52,6 +52,8 @@ bool UI::Initialise( const HINSTANCE instance )
 		FindResource( instance, MAKEINTRESOURCE( ButtonFilterImageIDs[ filterLetterState ] ), RT_BITMAP );
 		m_letterStateBitmapHandles[ filterLetterState ] = LoadBitmap( instance, MAKEINTRESOURCE( ButtonFilterImageIDs[ filterLetterState ] ) );
 	}
+	
+	RefreshFilterStateButtons();
 
 	for( UINT letterIndex = 0; letterIndex < wa::Word::WordLength; ++letterIndex )
 	{
@@ -61,11 +63,14 @@ bool UI::Initialise( const HINSTANCE instance )
 			SendMessage( editControl, EM_LIMITTEXT, 1, 0 );
 		}
 
-		RefreshFilterStateButtons();
 	}
 
-	Reset();
 	return true;
+}
+
+void UI::PostInitialise()
+{
+	Reset();
 }
 
 void UI::LinkHelper( wa::WordleAnalyser& helper )
@@ -84,14 +89,17 @@ void UI::Shutdown()
 
 void UI::Reset()
 {
-	for( UINT letterEditControlIndex = 0; letterEditControlIndex < wa::Word::WordLength; ++letterEditControlIndex )
+	for( UINT controlIndex = 0; controlIndex < wa::Word::WordLength; ++controlIndex )
 	{
-		SetDlgItemText( m_dialogHandle, LetterEditControlIDs[ letterEditControlIndex ], "" );
+		m_letterInfo[ controlIndex ].Reset();
+		SetDlgItemText( m_dialogHandle, LetterEditControlIDs[ controlIndex ], "" );
 	}
+
+	RefreshFilterStateButtons();
 
 	if( m_helper != nullptr )
 	{
-		m_helper->Reset();
+		m_helper->Guess();
 	}
 }
 
@@ -186,7 +194,8 @@ void UI::Guess()
 	wa::FilterWord filterWord( letters, letterFilterStates );
 	if( m_helper != nullptr )
 	{
-		m_helper->FilterAndGuess( filterWord );
+		m_helper->Filter( filterWord );
+		m_helper->Guess();
 	}
 }
 

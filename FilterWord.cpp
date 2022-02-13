@@ -34,10 +34,46 @@ bool FilterWord::PotentialMatch( const Word& word ) const
 				// If an incorrect letter is in the test word at all, then it can't be a match
 				for( UINT testWordLetterIndex = 0; testWordLetterIndex < WordLength; ++testWordLetterIndex )
 				{
-					if( word.GetLetterAtPosition( testWordLetterIndex ) == letter )
+					const CHAR testLetter = word.GetLetterAtPosition( testWordLetterIndex );
+
+					bool prevLetterFound = false;
+					for( UINT prevLetterSearchIndex = 0; prevLetterSearchIndex < testWordLetterIndex; ++prevLetterSearchIndex )
 					{
-						potentialMatch = false;
+						if( m_letters[ prevLetterSearchIndex ] == testLetter )
+						{
+							// We've seen this letter before, so ignore this one, as the previous letter will either be wrong
+							// causing the word to be discarded, or the earlier letter will have been correct, in which case
+							// we can skip checking further
+							prevLetterFound = true;
+							break;
+						}
+					}
+
+					if( prevLetterFound )
 						break;
+
+					if( testLetter == letter )
+					{
+						bool repeatLetterCorrect = false;
+
+						// Work back from the end and ensure this letter doesn't appear again in the correct position
+						for( UINT repeatLetterSearchIndex = WordLength - 1; repeatLetterSearchIndex > testWordLetterIndex; --repeatLetterSearchIndex )
+						{
+							const CHAR repeatLetter = m_letters[ repeatLetterSearchIndex ];
+							if( testLetter == repeatLetter )
+							{
+								if( m_filterLetterStates[ letterIndex ] == FilterLetterState::Correct )
+								{
+									// We've found an incorrect letter but the same letter is oorrect later on. This letter is acceptable
+									repeatLetterCorrect = true;
+								}
+							}
+						}
+						if( !repeatLetterCorrect )
+						{
+							potentialMatch = false;
+							break;
+						}
 					}
 				}
 			}
@@ -58,7 +94,10 @@ bool FilterWord::PotentialMatch( const Word& word ) const
 						}
 					}
 				}
-				potentialMatch = isLetterInWordAtAnyPlace;
+				if( !isLetterInWordAtAnyPlace )
+				{
+					potentialMatch = false;
+				}
 			}
 			break;
 

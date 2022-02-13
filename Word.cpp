@@ -35,10 +35,4 @@ CHAR Word::MakeLower( CHAR letter )
 	return letter;
 }
 
-CHAR Word::GetLetterAtPosition( const UINT position ) const
-{
-	ASSERT( position < WordLength, "Letter position out of range\n" );
-	return m_letters[ position ];
-}
-
 }
