@@ -2,14 +2,14 @@
 
 namespace wa
 {
-class WordleAnalyser;
+class WordleHelper;
 }
 
 namespace system
 {
 
 bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow );
-void LinkHelper( wa::WordleAnalyser& helper );
+void LinkHelper( wa::WordleHelper& helper );
 void UnlinkHelper();
 UINT Run();
 void Shutdown();

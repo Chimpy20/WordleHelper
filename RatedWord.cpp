@@ -5,10 +5,10 @@
 namespace wa
 {
 
-const float		RatedWord::CorrectLetterScore = 0.5f;
+const float		RatedWord::CorrectLetterScore = 0.50f;
 const float		RatedWord::WrongPositionScore = 0.25f;
 const float		RatedWord::MultipleLetterPenalty = 1.0f;
-const float		RatedWord::IncorrectLetterBonus = 0.5f;
+const float		RatedWord::IncorrectLetterBonus = 0.20f;
 
 RatedWord::RatedWord():
 	m_rating( 1.0f )
@@ -59,26 +59,21 @@ float RatedWord::RateAgainst( const Word& testWord, const Analysis& analysis )
 				rating += WrongPositionScore;
 		}
 
-		if( found )
-		{
-			// If this letter already occurs in the test word, it's less useful, so lower the score
-			for( UINT repeatLetterCheckIndex = 0; repeatLetterCheckIndex < letterIndex; ++repeatLetterCheckIndex )
-			{
-				if( testWord.GetLetterAtPosition( repeatLetterCheckIndex ) == testLetter )
-				{
-					rating -= MultipleLetterPenalty;
-				}
-			}
-		}
-		else
+		if( !found )
 		{
 			// Not being found is also useful as it eliminates letters - award a score for eliminated common letters
 			rating += IncorrectLetterBonus * analysis.GetWeightForLetterAtPosition( testLetter, letterIndex );
 		}
-	}
 
-	if( rating < 0.0f )
-		rating = 0.0f;
+		// If this letter already occurs in the test word, it's less useful, so lower the score
+		for( UINT repeatLetterCheckIndex = 0; repeatLetterCheckIndex < letterIndex; ++repeatLetterCheckIndex )
+		{
+			if( m_letters[ repeatLetterCheckIndex ] == currentLetter )
+			{
+				rating -= MultipleLetterPenalty;
+			}
+		}
+	}
 
 	return rating;
 }

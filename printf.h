@@ -108,6 +108,8 @@ int vsnprintf_(char* buffer, size_t count, const char* format, va_list va);
  */
 int fctprintf(void (*out)(char character, void* arg), void* arg, const char* format, ...);
 
+unsigned int strnlen_( const char* str, size_t maxsize );
+
 
 #ifdef __cplusplus
 }

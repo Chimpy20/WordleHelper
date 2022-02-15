@@ -3,7 +3,7 @@
 #include "System.h"
 #include "UI.h"
 #include "resource.h"
-#include "WordleAnalyser.h"
+#include "WordleHelper.h"
 
 namespace system
 {
@@ -63,7 +63,7 @@ bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 	return( g_dialog != NULL );
 }
 
-void LinkHelper( wa::WordleAnalyser& helper )
+void LinkHelper( wa::WordleHelper& helper )
 {
 	g_userInterface->LinkHelper( helper );
 }

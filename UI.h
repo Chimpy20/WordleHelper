@@ -4,7 +4,7 @@
 
 namespace wa
 {
-class WordleAnalyser;
+class WordleHelper;
 }
 
 namespace system
@@ -25,7 +25,7 @@ public:
 
 	bool						Initialise( const HINSTANCE instance );
 	void						PostInitialise();
-	void						LinkHelper( wa::WordleAnalyser& helper );
+	void						LinkHelper( wa::WordleHelper& helper );
 	void						UnlinkHelper();
 	void						Shutdown();
 
@@ -54,7 +54,7 @@ private:
 	HWND						m_dialogHandle;
 	HBITMAP						m_letterStateBitmapHandles[ wa::FilterLetterState::NumEntries ];
 	LetterInfo					m_letterInfo[ wa::Word::WordLength ]{};
-	wa::WordleAnalyser*			m_helper;
+	wa::WordleHelper*			m_helper;
 };
 
 } // namespace ui
