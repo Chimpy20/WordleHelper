@@ -27,4 +27,14 @@ void EndTimer( const CHAR* tag )
 	io::OutputMessage( "%s took %.4fms\n", tag, duration );
 }
 
+
+bool IsLetterAlpha( const CHAR letter )
+{
+	if( ( letter >= 'a' && letter <= 'z' ) ||
+		( letter >= 'A' && letter <= 'Z' ) )
+		return true;
+
+	return false;
+}
+
 }

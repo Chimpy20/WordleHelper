@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "WordleAnalyser.h"
+#include "WordleHelper.h"
 #include "System.h"
 
 int WINAPI WinMain( _In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In_ LPSTR cmdLine, _In_ int cmdShow )
@@ -11,18 +11,18 @@ int WINAPI WinMain( _In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _I
 	// Start up any platform related systems and begin the program
 	if( system::Initialise( instance, cmdLine, cmdShow ) )
 	{
-		wa::WordleAnalyser wordleAnalyser;
+		wa::WordleHelper wordleHelper;
 
-		wordleAnalyser.Initialise();
+		wordleHelper.Initialise();
 
-		system::LinkHelper( wordleAnalyser );
+		system::LinkHelper( wordleHelper );
 
 		// Perform the main loop until we exit the program
 		programResult = system::Run();
 
 		system::UnlinkHelper();
 
-		wordleAnalyser.Shutdown();
+		wordleHelper.Shutdown();
 
 		// Close down and clean up
 		system::Shutdown();

@@ -74,7 +74,7 @@ UINT WordList::ExtractWords( const CHAR* wordListRaw, UINT wordListRawSize )
 	{
 		currentLetter = wordListRaw[ currentWordListBufferPos + offset ];
 
-		while( IsLetterAlpha( currentLetter ) &&
+		while( utils::IsLetterAlpha( currentLetter ) &&
 			( offset < MaxWordBufferSize ) &&
 			( ( currentWordListBufferPos + offset ) < wordListRawSize ) )
 		{
@@ -129,15 +129,6 @@ void WordList::Randomise()
 	utils::EndTimer( "Randomise" );
 }
 
-bool WordList::IsLetterAlpha( const CHAR letter )
-{
-	if( ( letter >= 'a' && letter <= 'z' ) ||
-		( letter >= 'A' && letter <= 'Z' ) )
-		return true;
-
-	return false;
-}
-
 UINT WordList::DuplicateFrom( const WordList& other )
 {
 	m_wordList.clear();
@@ -159,7 +150,9 @@ UINT WordList::Filter( const FilterWord& filterWord )
 	while( itor != m_wordList.end() )
 	{
 		Word word = *itor;
-		// TODO - check the word is valid
+#ifdef _DEBUG
+		word.Validate();
+#endif
 		if( !filterWord.PotentialMatch( word ) )
 		{
 			itor = m_wordList.erase( itor );
@@ -173,8 +166,10 @@ UINT WordList::Filter( const FilterWord& filterWord )
 	return static_cast<UINT>( m_wordList.size() );
 }
 
+#ifdef _DEBUG
 void WordList::OutputWords() const
 {
+	io::OutputMessage( "Words in list are:\n" );
 	WordListContainer::const_iterator itor = m_wordList.begin();
 	while( itor != m_wordList.end() )
 	{
@@ -183,6 +178,7 @@ void WordList::OutputWords() const
 		itor++;
 	}
 }
+#endif // _DEBUG
 
 const containers::List<RatedWord>& WordList::Guess( const WordList& masterWordList )
 {

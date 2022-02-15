@@ -1,26 +1,26 @@
 #include "pch.h"
-#include "WordleAnalyser.h"
+#include "WordleHelper.h"
 #include "FilterWord.h"
 
 namespace wa
 {
 
-const WCHAR* const WordleAnalyser::WORD_LIST_FILENAME = L"wordlist.txt";
+const WCHAR* const WordleHelper::WordListFilename = L"wordlist.txt";
 
-WordleAnalyser::WordleAnalyser():
+WordleHelper::WordleHelper():
 	m_masterWordList( nullptr ),
 	m_filteredWords( nullptr )
 {
 }
 
-WordleAnalyser::~WordleAnalyser()
+WordleHelper::~WordleHelper()
 {
 }
 
-UINT WordleAnalyser::Initialise()
+UINT WordleHelper::Initialise()
 {
 	m_masterWordList = new WordList();
-	const UINT wordsRead = m_masterWordList->ReadWords( WORD_LIST_FILENAME, false );
+	const UINT wordsRead = m_masterWordList->ReadWords( WordListFilename, false );
 	m_masterWordList->Randomise();
 
 	m_filteredWords = new WordList();
@@ -30,36 +30,44 @@ UINT WordleAnalyser::Initialise()
 	return wordsRead;
 }
 
-UINT WordleAnalyser::Filter( const FilterWord& filterWord )
+UINT WordleHelper::Filter( const FilterWord& filterWord )
 {
 	UINT numFilteredWords = 0;
 	numFilteredWords = m_filteredWords->Filter( filterWord );
-	io::OutputMessage( "Filtered down to %u words\n", numFilteredWords );
+
+	CHAR filterMessage[ MessageMaxLength ];
+	io::FormatString( filterMessage, MessageMaxLength, "Filtered down to %u words\n", numFilteredWords );
+	m_messageLog.AddMessage( filterMessage, MessageMaxLength );
 
 	return numFilteredWords;
 }
 
-void WordleAnalyser::Guess()
+void WordleHelper::Guess()
 {
 	const WordList* const wordListToUseForGuess = ( m_filteredWords->GetNumWords() > 128 ) ? m_masterWordList : m_filteredWords;
 	if( wordListToUseForGuess->GetNumWords() > 0 )
 	{
+		CHAR infoMessage[ MessageMaxLength ];
+		io::FormatString( infoMessage, MessageMaxLength, "There are %u words possible\n", wordListToUseForGuess->GetNumWords() );
 		const containers::List<RatedWord>& ratedWordList = m_filteredWords->Guess( *wordListToUseForGuess );
 
-		io::OutputMessage( "Best guesses are:\n" );
+		CHAR guessMessage[ MessageMaxLength ];
+		io::FormatString( guessMessage, MessageMaxLength, "Best guesses are:\n\t" );
 		containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
 		UINT wordsToDisplay = 0;
 		while( itor != ratedWordList.end() && ( wordsToDisplay < 3 ) )
 		{
 			const RatedWord& word = *itor;
-			io::OutputMessage( "\t%s (%.5f)\n", word.GetAsString(), word.GetRating() );
+			io::FormatStringAppend( guessMessage, MessageMaxLength, "%s ", word.GetAsString() );
 			++itor;
 			++wordsToDisplay;
 		}
+		io::FormatStringAppend( guessMessage, MessageMaxLength, "\n" );
+		m_messageLog.AddMessage( guessMessage, MessageMaxLength );
 	}
 }
 
-void WordleAnalyser::Reset()
+void WordleHelper::Reset()
 {
 	ASSERT( m_masterWordList != nullptr, "Word list doesn't exist\n" );
 
@@ -70,7 +78,7 @@ void WordleAnalyser::Reset()
 	io::OutputMessage( "There are %u words\n", numWords );
 }
 
-void WordleAnalyser::Shutdown()
+void WordleHelper::Shutdown()
 {
 	if( m_filteredWords != nullptr )
 	{

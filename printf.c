@@ -175,6 +175,11 @@ static inline unsigned int _strnlen_s(const char* str, size_t maxsize)
   return (unsigned int)(s - str);
 }
 
+unsigned int strnlen_( const char* str, size_t maxsize )
+{
+	return _strnlen_s( str, maxsize );
+}
+
 
 // internal test if char is a digit (0-9)
 // \return true if char is a digit

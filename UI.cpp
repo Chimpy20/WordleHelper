@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "UI.h"
 #include "resource.h"
-#include "WordleAnalyser.h"
+#include "WordleHelper.h"
 
 namespace system
 {
@@ -70,10 +70,13 @@ bool UI::Initialise( const HINSTANCE instance )
 
 void UI::PostInitialise()
 {
-	Reset();
+	if( m_helper != nullptr )
+	{
+		m_helper->Guess();
+	}
 }
 
-void UI::LinkHelper( wa::WordleAnalyser& helper )
+void UI::LinkHelper( wa::WordleHelper& helper )
 {
 	m_helper = &helper;
 }
@@ -99,6 +102,7 @@ void UI::Reset()
 
 	if( m_helper != nullptr )
 	{
+		m_helper->Reset();
 		m_helper->Guess();
 	}
 }

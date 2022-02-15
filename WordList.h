@@ -59,8 +59,10 @@ public:
 	// @param masterWordList: the complete list of words - not the filtered down ones
 	const containers::List<RatedWord>& Guess( const WordList& masterWordList );
 
+#ifdef _DEBUG
 	// Output the words in the list
 	void					OutputWords() const;
+#endif
 
 private:
 	static const UINT		MaxWordBufferSize = 16;
@@ -68,9 +70,6 @@ private:
 	// Internal function to create the Word objects from a words in memory
 	// @return number of words extracted
 	UINT					ExtractWords( const CHAR* wordListRaw, UINT wordListRawSize );
-
-	// @return is the provided letter in the range 'a' to 'z', or 'A' to 'Z'?
-	bool					IsLetterAlpha( const CHAR letter );
 
 	WordListContainer		m_wordList; // The container of the words
 	Analysis				m_analysis; // Analysis object for these words

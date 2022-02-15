@@ -11,6 +11,10 @@ Guesser::Guesser( const WordList& wordList ) :
 {
 }
 
+// Produces a list of words sorted by a "rating" or "score" based on how common the letters in the word are
+// and how likely they are to elimiate other words
+// @param masterWordList: The list of all N-letter words, one of which will be the solution
+// @param analysis: The analysis object used to help weight some letters
 void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 {
 	utils::StartTimer();
@@ -52,6 +56,9 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 			++listItor;
 		}
 
+		/*if( rating < 0.0f )
+			rating = 0.0f;*/
+
 		// Normalise the rating
 		rating /= masterWordsDivisor;
 		ratedWord.SetRating( rating );
@@ -61,6 +68,7 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 		++masterListItor;
 	}
 
+	// Sort the list of words
 	m_ratedWordList.sort();
 
 	utils::EndTimer( "Guess" );

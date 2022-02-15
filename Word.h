@@ -46,6 +46,10 @@ public:
 		return m_letters;
 	}
 
+#ifdef _DEBUG
+	bool				Validate() const;
+#endif
+
 protected:
 	// Internal function to make the letters all lower case
 	static CHAR			MakeLower( CHAR letter );
