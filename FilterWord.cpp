@@ -36,25 +36,26 @@ bool FilterWord::PotentialMatch( const Word& word ) const
 		{
 			case FilterLetterState::Incorrect:
 			{
+				// If this letter is incorrect, but we've seen this letter in the guess word before, then skip to the next letter
+				bool prevLetterFound = false;
+				for( UINT prevLetterSearchIndex = 0; prevLetterSearchIndex < letterIndex; ++prevLetterSearchIndex )
+				{
+					if( m_letters[ prevLetterSearchIndex ] == letter )
+					{
+						// We've seen this letter before, so ignore this one, as the previous letter will either be wrong
+						// causing the word to be discarded, or the earlier letter will have been correct, in which case
+						// we can skip checking further
+						prevLetterFound = true;
+						break;
+					}
+				}
+
+				if( prevLetterFound )
+					break;
+
 				// If an incorrect letter is in the test word at all, then it can't be a match
 				for( UINT testWordLetterIndex = 0; testWordLetterIndex < WordLength; ++testWordLetterIndex )
 				{
-					// If this letter is incorrect, but we've seen this letter in the guess word before, then skip to the next letter
-					bool prevLetterFound = false;
-					for( UINT prevLetterSearchIndex = 0; prevLetterSearchIndex < letterIndex; ++prevLetterSearchIndex )
-					{
-						if( word.GetLetterAtPosition( prevLetterSearchIndex ) == letter )
-						{
-							// We've seen this letter before, so ignore this one, as the previous letter will either be wrong
-							// causing the word to be discarded, or the earlier letter will have been correct, in which case
-							// we can skip checking further
-							prevLetterFound = true;
-							break;
-						}
-					}
-
-					if( prevLetterFound )
-						break;
 
 					const CHAR testLetter = word.GetLetterAtPosition( testWordLetterIndex );
 					if( testLetter == letter )
