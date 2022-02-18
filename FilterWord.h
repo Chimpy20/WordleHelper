@@ -2,7 +2,7 @@
 
 #include "Word.h"
 
-namespace wa
+namespace wh
 {
 
 enum FilterLetterState
@@ -32,4 +32,4 @@ private:
 	FilterLetterState	m_filterLetterStates[ WordLength ] = { FilterLetterState::Incorrect }; // The state of each letter in a guess word i.e. WrongPosition
 };
 
-} // namespace wa
+} // namespace wh

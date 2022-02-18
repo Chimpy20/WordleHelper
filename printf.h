@@ -110,6 +110,8 @@ int fctprintf(void (*out)(char character, void* arg), void* arg, const char* for
 
 unsigned int strnlen_( const char* str, size_t maxsize );
 
+char* _strncpy( char* dest, const char* source, size_t count );
+
 
 #ifdef __cplusplus
 }

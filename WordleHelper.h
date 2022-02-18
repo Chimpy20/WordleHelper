@@ -3,7 +3,7 @@
 #include "WordList.h"
 #include "MessageLog.h"
 
-namespace wa
+namespace wh
 {
 
 class WordleHelper
@@ -18,19 +18,21 @@ public:
 	void				Guess();
 	UINT				Filter( const FilterWord& filterWord );
 	void				Reset();
-	void				Run();
+	MessageLog*			GetMessageLog() const
+	{
+		return m_messageLog;
+	}
 
 	// Close down the analyser
 	void				Shutdown();
 
 private:
-	static const WCHAR* const WordListFilename;
 	static const UINT	MessageMaxLength = 128;
 
 	// The list of all possible solutions
 	WordList*			m_masterWordList;
 	WordList*			m_filteredWords;
-	MessageLog			m_messageLog;
+	MessageLog*			m_messageLog;
 };
 
-} // namespace wa
+} // namespace wh

@@ -20,5 +20,6 @@ private:
 } // namespace memory
 
 void* operator new( size_t size );
+void* operator new[]( size_t size );
 void operator delete( void* p );
 void operator delete( void* p, unsigned __int64 size );

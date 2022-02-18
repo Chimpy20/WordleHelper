@@ -1,9 +1,10 @@
 #include "pch.h"
+#include "System.h"
 #include "WordList.h"
 #include "Word.h"
 #include "Analysis.h"
 
-namespace wa
+namespace wh
 {
 
 WordList::WordList() :
@@ -17,46 +18,27 @@ WordList::~WordList()
 	m_wordList.clear();
 }
 
-UINT WordList::ReadWords( const WCHAR* wordListFileName, bool append )
+UINT WordList::ReadWords( const INT wordListResourceID, bool append )
 {
-	CHAR* wordListRaw = nullptr;
-	UINT wordListRawSize = 0;
-
-	HANDLE wordListFileHandle = CreateFileW( wordListFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr );
-	if( wordListFileHandle == INVALID_HANDLE_VALUE )
-	{
-		return false;
-	}
-
 	UINT numWordsRead = 0;
-
-	LARGE_INTEGER fileSize;
-	if( GetFileSizeEx( wordListFileHandle, &fileSize ) )
+	UINT fileSize = 0;
+	const CHAR* textFileBytes = system::OpenTextFile( wordListResourceID, fileSize );
+	CHAR* wordListRaw = (CHAR*)memory::Heap::Alloc( fileSize );
+	
+	// Clear the list before if we're not appending
+	if( !append )
 	{
-		wordListRaw = (CHAR*)memory::Heap::Alloc( fileSize.QuadPart );
-		DWORD bytesRead = 0;
-		if( ReadFile( wordListFileHandle, wordListRaw, fileSize.LowPart, &bytesRead, nullptr ) )
-		{
-			ASSERT( bytesRead == fileSize.LowPart, "Wrong number of bytes read, read %u, expecting %u\n", bytesRead, fileSize.LowPart );
-			if( bytesRead == fileSize.LowPart )
-			{
-				// Clear the list before if we're not appending
-				if( !append )
-				{
-					m_wordList.clear();
-				}
-				wordListRawSize = bytesRead;
-				numWordsRead = ExtractWords( wordListRaw, wordListRawSize );
-			}
-		}
+		m_wordList.clear();
 	}
+
+	numWordsRead = ExtractWords( textFileBytes, fileSize );
 
 	if( wordListRaw != nullptr )
 	{
 		memory::Heap::Free( wordListRaw );
 	}
 
-	CloseHandle( wordListFileHandle );
+	system::CloseTextFile( wordListResourceID );
 
 	return numWordsRead;
 }

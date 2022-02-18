@@ -8,8 +8,9 @@
 namespace system
 {
 
-ui::UI* g_userInterface = nullptr;
-HWND g_dialog = NULL;
+static HINSTANCE g_instance = NULL;
+static ui::UI* g_userInterface = nullptr;
+static HWND g_dialog = NULL;
 
 INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam );
 
@@ -19,6 +20,8 @@ bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 	{
 		return false;
 	}
+
+	g_instance = instance;
 
 	InitCommonControls();
 
@@ -63,7 +66,7 @@ bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 	return( g_dialog != NULL );
 }
 
-void LinkHelper( wa::WordleHelper& helper )
+void LinkHelper( wh::WordleHelper& helper )
 {
 	g_userInterface->LinkHelper( helper );
 }
@@ -71,6 +74,31 @@ void LinkHelper( wa::WordleHelper& helper )
 void UnlinkHelper()
 {
 	g_userInterface->UnlinkHelper();
+}
+
+const CHAR* OpenTextFile( const INT resourceID, UINT& dataSize )
+{
+	// Get the raw data from an embedded text file in the executable
+	HRSRC textFileResource = FindResource( g_instance, MAKEINTRESOURCE( resourceID ), MAKEINTRESOURCE( TEXTFILE ) );
+	if( textFileResource != NULL )
+	{
+		HGLOBAL fileDataHandle = LoadResource( g_instance, textFileResource );
+		if( fileDataHandle != NULL )
+		{
+			dataSize = SizeofResource( GetModuleHandle( NULL ), textFileResource );
+			const CHAR* data = static_cast<const CHAR*>( LockResource( fileDataHandle ) );
+			return data;
+		}
+	}
+
+	dataSize = 0;
+	return nullptr;
+}
+
+void CloseTextFile( const INT resourceID )
+{
+	// Apparently resources don't need unlocking
+	// <--https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-lockresource -->
 }
 
 UINT Run()

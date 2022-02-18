@@ -3,7 +3,7 @@
 #include "List.h"
 #include "RatedWord.h"
 
-namespace wa
+namespace wh
 {
 
 class WordList;
@@ -36,4 +36,4 @@ private:
 	containers::List<RatedWord>	m_ratedWordList; // Filled in with rated words, sorted by suitability
 };
 
-} // namespace wa
+} // namespace wh

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "FilterWord.h"
 
-namespace wa
+namespace wh
 {
 
 FilterWord::FilterWord( const CHAR letters[ WordLength ], const FilterLetterState filteredLetterStates[ WordLength ] )
