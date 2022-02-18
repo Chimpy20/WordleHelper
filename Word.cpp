@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Word.h"
 
-namespace wa
+namespace wh
 {
 
 Word::Word()

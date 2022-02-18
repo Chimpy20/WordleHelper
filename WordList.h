@@ -5,7 +5,7 @@
 #include "Analysis.h"
 #include "Guesser.h"
 
-namespace wa
+namespace wh
 {
 
 class Analysis;
@@ -42,7 +42,7 @@ public:
 	// Reads words from a file on disk
 	// @param append: set true to add words to the existing list, false to clear the list first
 	// @return the number of words read from disk
-	UINT					ReadWords( const WCHAR* wordListFileName, bool append );
+	UINT					ReadWords( const INT wordListResourceID, bool append );
 
 	// Mix up the words in the list.
 	// This is useful because the words appear in the order they are used in Wordle
@@ -76,4 +76,4 @@ private:
 	Guesser					m_guesser; // Performs a guess for possible solutions
 };
 
-} // namespace wa
+} // namespace wh

@@ -11,7 +11,7 @@ int WINAPI WinMain( _In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _I
 	// Start up any platform related systems and begin the program
 	if( system::Initialise( instance, cmdLine, cmdShow ) )
 	{
-		wa::WordleHelper wordleHelper;
+		wh::WordleHelper wordleHelper;
 
 		wordleHelper.Initialise();
 

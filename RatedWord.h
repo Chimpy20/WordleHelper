@@ -2,7 +2,7 @@
 
 #include "Word.h"
 
-namespace wa
+namespace wh
 {
 
 class Analysis;
@@ -29,15 +29,8 @@ public:
 	}
 	void					SetRating( const float rating );
 
-	float					RateAgainst( const Word& testWord, const Analysis& analysis );
-
 private:
-	static const float		CorrectLetterScore;
-	static const float		WrongPositionScore;
-	static const float		MultipleLetterPenalty;
-	static const float		IncorrectLetterBonus;
-
 	float					m_rating;
 };
 
-} // namespace wa
+} // namespace wh

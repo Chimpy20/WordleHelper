@@ -1,6 +1,6 @@
 #pragma once
 
-namespace wa
+namespace wh
 {
 
 // An object describing an N letter word
@@ -57,4 +57,4 @@ protected:
 	CHAR				m_letters[ WordLength + 1 ] = { '\0' }; // The letters in the word as a c-style array
 };
 
-} // namespace wa
+} // namespace wh

@@ -5,6 +5,7 @@
 #include "IO.h"
 #include "Debug.h"
 #include "Utils.h"
+#include "printf.h"
 #include "resource.h"
 
 #define _CRTDBG_MAP_ALLOC

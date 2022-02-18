@@ -44,6 +44,11 @@ void* operator new( size_t size )
 	return memory::Heap::Alloc( size );
 }
 
+void* operator new[]( size_t size )
+{
+	return memory::Heap::Alloc( size );
+}
+
 void operator delete( void* p )
 {
 	memory::Heap::Free( p );

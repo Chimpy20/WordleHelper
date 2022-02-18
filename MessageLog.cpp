@@ -1,22 +1,42 @@
 #include "pch.h"
 #include "MessageLog.h"
 
-namespace wa
+namespace wh
 {
 
 void MessageLog::Reset()
 {
+	m_messageList.clear();
 }
 
-bool MessageLog::AddMessage( const CHAR* const message, const UINT numChars )
+bool MessageLog::AddMessage( const CHAR* const messageText, const UINT numChars )
 {
-	io::OutputMessage( message );
+	Message message( messageText );
+	m_messageList.push_back( message );
+	io::OutputMessage( messageText );
 	return true;
 }
 
-UINT MessageLog::GetMessageLog( CHAR* const log, const UINT logMaxSize )
+UINT MessageLog::GetCombinedMessages( CHAR* log, const UINT logMaxSize ) const
 {
-	return 0;
+	MessageListContainer::const_iterator itor = m_messageList.begin();
+	INT offset = 0;
+	INT charsRemaining = logMaxSize;
+	while( itor != m_messageList.end() )
+	{
+		const Message& message = *itor;
+		_strncpy( log + offset, message.m_message, charsRemaining );
+
+		const UINT messageSize = strnlen_( message.m_message, MaxLogMessageSize );
+		offset += messageSize;
+		charsRemaining -= messageSize;
+		if( charsRemaining <= 0 )
+			break;
+
+		itor++;
+	}
+
+	return offset;
 }
 
-} // namespace wa
+} // namespace wh

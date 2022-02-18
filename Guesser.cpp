@@ -3,7 +3,7 @@
 #include "WordList.h"
 #include "FilterWord.h"
 
-namespace wa
+namespace wh
 {
 
 Guesser::Guesser( const WordList& wordList ) :
@@ -51,7 +51,7 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 			const Word& checkWord = *listItor;
 			if( word != checkWord )
 			{
-				rating += ratedWord.RateAgainst( checkWord, analysis );
+				rating += analysis.RateWord( word, checkWord );
 			}
 			++listItor;
 		}

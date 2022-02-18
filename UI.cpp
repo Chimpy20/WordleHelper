@@ -9,7 +9,7 @@ namespace system
 namespace ui
 {
 
-UINT UI::LetterEditControlIDs[ wa::Word::WordLength ] =
+UINT UI::LetterEditControlIDs[ wh::Word::WordLength ] =
 {
 	IDC_LETTER0,
 	IDC_LETTER1,
@@ -18,7 +18,7 @@ UINT UI::LetterEditControlIDs[ wa::Word::WordLength ] =
 	IDC_LETTER4
 };
 
-UINT UI::ButtonFilterControlIDs[ wa::Word::WordLength ] =
+UINT UI::ButtonFilterControlIDs[ wh::Word::WordLength ] =
 {
 	IDB_FILTERSTATE0,
 	IDB_FILTERSTATE1,
@@ -27,7 +27,7 @@ UINT UI::ButtonFilterControlIDs[ wa::Word::WordLength ] =
 	IDB_FILTERSTATE4
 };
 
-UINT UI::ButtonFilterImageIDs[ wa::FilterLetterState::NumEntries ] =
+UINT UI::ButtonFilterImageIDs[ wh::FilterLetterState::NumEntries ] =
 {
 	IDB_BLOCKGREY,
 	IDB_BLOCKYELLOW,
@@ -36,18 +36,24 @@ UINT UI::ButtonFilterImageIDs[ wa::FilterLetterState::NumEntries ] =
 
 UI::UI( const HWND dialogHandle ):
 	m_dialogHandle( dialogHandle ),
-	m_letterStateBitmapHandles{NULL},
-	m_helper(nullptr)
+	m_letterStateBitmapHandles{ NULL },
+	m_helper( nullptr ),
+	m_messageLogText( nullptr )
 {
+	m_messageLogText = new CHAR[ MessageEditControlMaxChars ];
 }
 
 UI::~UI()
 {
+	if( m_messageLogText != nullptr )
+	{
+		delete m_messageLogText;
+	}
 }
 
 bool UI::Initialise( const HINSTANCE instance )
 {
-	for( UINT filterLetterState = 0; filterLetterState < wa::FilterLetterState::NumEntries; ++filterLetterState )
+	for( UINT filterLetterState = 0; filterLetterState < wh::FilterLetterState::NumEntries; ++filterLetterState )
 	{
 		FindResource( instance, MAKEINTRESOURCE( ButtonFilterImageIDs[ filterLetterState ] ), RT_BITMAP );
 		m_letterStateBitmapHandles[ filterLetterState ] = LoadBitmap( instance, MAKEINTRESOURCE( ButtonFilterImageIDs[ filterLetterState ] ) );
@@ -55,7 +61,7 @@ bool UI::Initialise( const HINSTANCE instance )
 	
 	RefreshFilterStateButtons();
 
-	for( UINT letterIndex = 0; letterIndex < wa::Word::WordLength; ++letterIndex )
+	for( UINT letterIndex = 0; letterIndex < wh::Word::WordLength; ++letterIndex )
 	{
 		const HWND editControl = GetDlgItem( m_dialogHandle, LetterEditControlIDs[ letterIndex ] );
 		if( editControl != NULL )
@@ -74,9 +80,11 @@ void UI::PostInitialise()
 	{
 		m_helper->Guess();
 	}
+
+	UpdateOutoutLog();
 }
 
-void UI::LinkHelper( wa::WordleHelper& helper )
+void UI::LinkHelper( wh::WordleHelper& helper )
 {
 	m_helper = &helper;
 }
@@ -92,19 +100,15 @@ void UI::Shutdown()
 
 void UI::Reset()
 {
-	for( UINT controlIndex = 0; controlIndex < wa::Word::WordLength; ++controlIndex )
-	{
-		m_letterInfo[ controlIndex ].Reset();
-		SetDlgItemText( m_dialogHandle, LetterEditControlIDs[ controlIndex ], "" );
-	}
-
-	RefreshFilterStateButtons();
+	ClearInputControls();
 
 	if( m_helper != nullptr )
 	{
 		m_helper->Reset();
 		m_helper->Guess();
 	}
+
+	UpdateOutoutLog();
 }
 
 bool UI::OnCommand( const WPARAM wParam, const LPARAM lParam )
@@ -120,22 +124,21 @@ bool UI::OnCommand( const WPARAM wParam, const LPARAM lParam )
 			if( m_letterInfo[ letterIndex ].m_letter != letter[ 0 ] )
 			{
 				m_letterInfo[ letterIndex ].m_letter = letter[ 0 ];
-				DEBUG_MESSAGE( "Setting letter %u to %c\n", letterIndex, letter[ 0 ] );
 			}
 		}
 	}
 
-	for( UINT stateButtonControlIndex = 0; stateButtonControlIndex < wa::Word::WordLength; ++stateButtonControlIndex )
+	for( UINT stateButtonControlIndex = 0; stateButtonControlIndex < wh::Word::WordLength; ++stateButtonControlIndex )
 	{
 		if( LOWORD( wParam ) == ButtonFilterControlIDs[ stateButtonControlIndex ] )
 		{
 			UINT filterLetterState = m_letterInfo[ stateButtonControlIndex ].m_filterLetterState;
 			++filterLetterState;
-			if( filterLetterState >= wa::FilterLetterState::NumEntries )
+			if( filterLetterState >= wh::FilterLetterState::NumEntries )
 			{
 				filterLetterState = 0;
 			}
-			m_letterInfo[ stateButtonControlIndex ].m_filterLetterState = static_cast<wa::FilterLetterState>( filterLetterState );
+			m_letterInfo[ stateButtonControlIndex ].m_filterLetterState = static_cast<wh::FilterLetterState>( filterLetterState );
 			RefreshFilterStateButtons();
 			break;
 		}
@@ -159,7 +162,7 @@ bool UI::OnCommand( const WPARAM wParam, const LPARAM lParam )
 UINT UI::GetLetterIndexFromEditControlID( const UINT editControlID )
 {
 	UINT foundLetterIndex = 0;
-	for( UINT letterIndex = 0; letterIndex < wa::Word::WordLength; ++letterIndex )
+	for( UINT letterIndex = 0; letterIndex < wh::Word::WordLength; ++letterIndex )
 	{
 		if( editControlID == LetterEditControlIDs[ letterIndex ] )
 		{
@@ -173,12 +176,12 @@ UINT UI::GetLetterIndexFromEditControlID( const UINT editControlID )
 
 void UI::RefreshFilterStateButtons()
 {
-	for( UINT letterIndex = 0; letterIndex < wa::Word::WordLength; ++letterIndex )
+	for( UINT letterIndex = 0; letterIndex < wh::Word::WordLength; ++letterIndex )
 	{
 		const HWND buttonHandle = GetDlgItem( m_dialogHandle, ButtonFilterControlIDs[ letterIndex ] );
 		if( buttonHandle != NULL )
 		{
-			const wa::FilterLetterState letterFilterState = m_letterInfo[ letterIndex ].m_filterLetterState;
+			const wh::FilterLetterState letterFilterState = m_letterInfo[ letterIndex ].m_filterLetterState;
 			SendMessage( buttonHandle, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)m_letterStateBitmapHandles[ letterFilterState ] );
 		}
 	}
@@ -186,21 +189,46 @@ void UI::RefreshFilterStateButtons()
 
 void UI::Guess()
 {
-	CHAR letters[ wa::Word::WordLength ];
-	wa::FilterLetterState letterFilterStates[ wa::Word::WordLength ];
+	CHAR letters[ wh::Word::WordLength ];
+	wh::FilterLetterState letterFilterStates[ wh::Word::WordLength ];
 
-	for( UINT letterIndex = 0; letterIndex < wa::Word::WordLength; ++letterIndex )
+	for( UINT letterIndex = 0; letterIndex < wh::Word::WordLength; ++letterIndex )
 	{
 		letters[ letterIndex ] = m_letterInfo[ letterIndex ].m_letter;
 		letterFilterStates[ letterIndex ] = m_letterInfo[ letterIndex ].m_filterLetterState;
 	}
 	
-	wa::FilterWord filterWord( letters, letterFilterStates );
+	wh::FilterWord filterWord( letters, letterFilterStates );
 	if( m_helper != nullptr )
 	{
 		m_helper->Filter( filterWord );
 		m_helper->Guess();
 	}
+
+	ClearInputControls();
+
+	UpdateOutoutLog();
+}
+
+void UI::ClearInputControls()
+{
+	for( UINT controlIndex = 0; controlIndex < wh::Word::WordLength; ++controlIndex )
+	{
+		m_letterInfo[ controlIndex ].Reset();
+		SetDlgItemText( m_dialogHandle, LetterEditControlIDs[ controlIndex ], "" );
+	}
+
+	RefreshFilterStateButtons();
+}
+
+void UI::UpdateOutoutLog()
+{
+	wh::MessageLog* const messageLog = m_helper->GetMessageLog();
+	messageLog->GetCombinedMessages( m_messageLogText, MessageEditControlMaxChars );
+
+	const HWND editOutputHandle = GetDlgItem( m_dialogHandle, IDC_OUTPUT );
+	SetWindowText( editOutputHandle, m_messageLogText );
+	SendMessage( editOutputHandle, EM_SCROLLCARET, 0, 0 );
 }
 
 } // namespace ui

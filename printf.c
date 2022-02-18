@@ -180,6 +180,18 @@ unsigned int strnlen_( const char* str, size_t maxsize )
 	return _strnlen_s( str, maxsize );
 }
 
+char* _strncpy( char* dest, const char* source, size_t count )
+{
+	size_t size = _strnlen_s( source, count );
+	int idx = 0;
+	while( ( idx < count ) && ( idx < size ) && ( source[ idx ] != '\0' ) )
+	{
+		dest[ idx ] = source[ idx ];
+		++idx;
+	}
+	dest[ idx ] = '\0';
+	return dest;
+}
 
 // internal test if char is a digit (0-9)
 // \return true if char is a digit

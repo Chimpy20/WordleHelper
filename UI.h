@@ -2,7 +2,7 @@
 
 #include "FilterWord.h"
 
-namespace wa
+namespace wh
 {
 class WordleHelper;
 }
@@ -16,16 +16,16 @@ namespace ui
 class UI
 {
 public:
-	static UINT					LetterEditControlIDs[ wa::Word::WordLength ];
-	static UINT					ButtonFilterControlIDs[ wa::Word::WordLength ];
-	static UINT					ButtonFilterImageIDs[ wa::FilterLetterState::NumEntries ];
+	static UINT					LetterEditControlIDs[ wh::Word::WordLength ];
+	static UINT					ButtonFilterControlIDs[ wh::Word::WordLength ];
+	static UINT					ButtonFilterImageIDs[ wh::FilterLetterState::NumEntries ];
 
 	UI( const HWND dialogHandle );
 	~UI();
 
 	bool						Initialise( const HINSTANCE instance );
 	void						PostInitialise();
-	void						LinkHelper( wa::WordleHelper& helper );
+	void						LinkHelper( wh::WordleHelper& helper );
 	void						UnlinkHelper();
 	void						Shutdown();
 
@@ -36,25 +36,29 @@ public:
 	void						Guess();
 
 private:
+	static const UINT			MessageEditControlMaxChars = 2048;
 	class LetterInfo
 	{
 	public:
 		void Reset()
 		{
-			m_filterLetterState = wa::FilterLetterState::Incorrect;
+			m_filterLetterState = wh::FilterLetterState::Incorrect;
 			m_letter = '\0';
 		}
-		wa::FilterLetterState	m_filterLetterState = wa::FilterLetterState::Incorrect;
+		wh::FilterLetterState	m_filterLetterState = wh::FilterLetterState::Incorrect;
 		CHAR					m_letter = '\0';
 	};
 
 	UINT						GetLetterIndexFromEditControlID( const UINT editControlID );
 	void						RefreshFilterStateButtons();
+	void						ClearInputControls();
+	void						UpdateOutoutLog();
 
 	HWND						m_dialogHandle;
-	HBITMAP						m_letterStateBitmapHandles[ wa::FilterLetterState::NumEntries ];
-	LetterInfo					m_letterInfo[ wa::Word::WordLength ]{};
-	wa::WordleHelper*			m_helper;
+	HBITMAP						m_letterStateBitmapHandles[ wh::FilterLetterState::NumEntries ];
+	LetterInfo					m_letterInfo[ wh::Word::WordLength ]{};
+	wh::WordleHelper*			m_helper;
+	CHAR*						m_messageLogText;
 };
 
 } // namespace ui
