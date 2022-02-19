@@ -51,8 +51,12 @@ UI::~UI()
 	}
 }
 
+// Called while other objects are being initialised - other objects may not exist at
+// this stage
+// @param instance the program instance
 bool UI::Initialise( const HINSTANCE instance )
 {
+	// Load the bitmap for the coloured buttons
 	for( UINT filterLetterState = 0; filterLetterState < wh::FilterLetterState::NumEntries; ++filterLetterState )
 	{
 		FindResource( instance, MAKEINTRESOURCE( ButtonFilterImageIDs[ filterLetterState ] ), RT_BITMAP );
@@ -61,6 +65,7 @@ bool UI::Initialise( const HINSTANCE instance )
 	
 	RefreshFilterStateButtons();
 
+	// Make each edit box for the letters only take one character
 	for( UINT letterIndex = 0; letterIndex < wh::Word::WordLength; ++letterIndex )
 	{
 		const HWND editControl = GetDlgItem( m_dialogHandle, LetterEditControlIDs[ letterIndex ] );
@@ -74,8 +79,10 @@ bool UI::Initialise( const HINSTANCE instance )
 	return true;
 }
 
+// Called after other objects have been created
 void UI::PostInitialise()
 {
+	// Do an initial guess when everything is set up
 	if( m_helper != nullptr )
 	{
 		m_helper->Guess();
@@ -98,10 +105,12 @@ void UI::Shutdown()
 {
 }
 
-void UI::Reset()
+// Reset the UI state
+void UI::OnReset()
 {
 	ClearInputControls();
 
+	// Clear everything and make a new initial guess
 	if( m_helper != nullptr )
 	{
 		m_helper->Reset();
@@ -111,6 +120,7 @@ void UI::Reset()
 	UpdateOutoutLog();
 }
 
+// Handles commands for the dialog passed here from the main WndProc
 bool UI::OnCommand( const WPARAM wParam, const LPARAM lParam )
 {
 	if( HIWORD( wParam ) == EN_CHANGE )
@@ -147,10 +157,10 @@ bool UI::OnCommand( const WPARAM wParam, const LPARAM lParam )
 	switch( LOWORD( wParam ) )
 	{
 		case IDB_RESET:
-			Reset();
+			OnReset();
 			break;
 		case IDB_GUESS:
-			Guess();
+			OnGuess();
 			break;
 		default:
 			break;
@@ -159,6 +169,7 @@ bool UI::OnCommand( const WPARAM wParam, const LPARAM lParam )
 	return true;
 }
 
+// Given an edit control ID, find the letter index
 UINT UI::GetLetterIndexFromEditControlID( const UINT editControlID )
 {
 	UINT foundLetterIndex = 0;
@@ -174,6 +185,7 @@ UINT UI::GetLetterIndexFromEditControlID( const UINT editControlID )
 	return foundLetterIndex;
 }
 
+// Update the visual state of the coloured letter state buttons
 void UI::RefreshFilterStateButtons()
 {
 	for( UINT letterIndex = 0; letterIndex < wh::Word::WordLength; ++letterIndex )
@@ -187,7 +199,8 @@ void UI::RefreshFilterStateButtons()
 	}
 }
 
-void UI::Guess()
+// When 'guess' has been clicked
+void UI::OnGuess()
 {
 	CHAR letters[ wh::Word::WordLength ];
 	wh::FilterLetterState letterFilterStates[ wh::Word::WordLength ];
@@ -210,6 +223,7 @@ void UI::Guess()
 	UpdateOutoutLog();
 }
 
+// Reset the state of the controls to blank
 void UI::ClearInputControls()
 {
 	for( UINT controlIndex = 0; controlIndex < wh::Word::WordLength; ++controlIndex )
@@ -221,6 +235,7 @@ void UI::ClearInputControls()
 	RefreshFilterStateButtons();
 }
 
+// Put all the messages for this run in the output edit control
 void UI::UpdateOutoutLog()
 {
 	wh::MessageLog* const messageLog = m_helper->GetMessageLog();

@@ -179,7 +179,7 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 #ifdef __cplusplus
 extern "C"
 {
-	#pragma function(memset)
+/*	#pragma function(memset)
 	void* __cdecl memset( _Out_writes_bytes_all_( count ) void* dest, _In_ int value, _In_ size_t count )
 	{
 		char* bytes = (char*)dest;
@@ -188,7 +188,7 @@ extern "C"
 			*bytes++ = (char)value;
 		}
 		return dest;
-	}
+	}*/
 
 	int _fltused = 0;
 }

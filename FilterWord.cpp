@@ -90,6 +90,14 @@ bool FilterWord::PotentialMatch( const Word& word ) const
 
 		case FilterLetterState::WrongPosition:
 			{
+				// If this letter matches, but the guess states it as being the wrong position, this can't
+				// be a possible solution as the letter isn't in this position
+				if( word.GetLetterAtPosition( letterIndex ) == letter )
+				{
+					potentialMatch = false;
+					break;
+				}
+
 				// check to see if the letter is in another position, if it is, this could be a match
 				bool isLetterInWordAtAnyPlace = false;
 				for( UINT testWordLetterIndex = 0; testWordLetterIndex < WordLength; ++testWordLetterIndex )

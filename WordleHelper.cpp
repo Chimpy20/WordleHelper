@@ -20,6 +20,9 @@ UINT WordleHelper::Initialise()
 {
 	m_masterWordList = new WordList();
 	const UINT wordsRead = m_masterWordList->ReadWords( IDR_PRIMARYWORDLIST, false );
+
+	// Mix up the overall list of words because wordle uses consequative words each day from the list
+	// which may indicate which word is the solution
 	m_masterWordList->Randomise();
 
 	m_filteredWords = new WordList();
@@ -31,7 +34,7 @@ UINT WordleHelper::Initialise()
 	return wordsRead;
 }
 
-
+// Reduce the current list of possible words down based on the current guess word
 UINT WordleHelper::Filter( const FilterWord& filterWord )
 {
 	CHAR filterMessage[ MessageMaxLength ];
@@ -59,15 +62,19 @@ UINT WordleHelper::Filter( const FilterWord& filterWord )
 	return numFilteredWords;
 }
 
+// Provide some next guesses based on the current possible solutions
 void WordleHelper::Guess()
 {
-	const WordList* const wordListToUseForGuess = ( m_filteredWords->GetNumWords() > 128 ) ? m_masterWordList : m_filteredWords;
+	const WordList* const wordListToUseForGuess = ( m_filteredWords->GetNumWords() > MatchThreshold ) ? m_masterWordList : m_filteredWords;
 	if( wordListToUseForGuess->GetNumWords() > 0 )
 	{
 		CHAR infoMessage[ MessageMaxLength ];
 		io::FormatString( infoMessage, MessageMaxLength, "There are %u words possible\r\n", wordListToUseForGuess->GetNumWords() );
+
+		// Do the guess
 		const containers::List<RatedWord>& ratedWordList = m_filteredWords->Guess( *wordListToUseForGuess );
 
+		// Output the results
 		CHAR guessMessage[ MessageMaxLength ];
 		io::FormatString( guessMessage, MessageMaxLength, "Best guesses are:\r\n" );
 		containers::List<RatedWord>::const_iterator itor = ratedWordList.begin();
@@ -84,6 +91,7 @@ void WordleHelper::Guess()
 	}
 }
 
+// Reset things back ready for a new try
 void WordleHelper::Reset()
 {
 	m_messageLog->Reset();

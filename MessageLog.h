@@ -5,6 +5,7 @@
 namespace wh
 {
 
+// Holds the messages displayed by the program and combines them for display
 class MessageLog
 {
 public:

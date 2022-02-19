@@ -4,10 +4,6 @@
 
 namespace wh
 {
-const float		Analysis::CorrectLetterScore = 0.50f;
-const float		Analysis::WrongPositionScore = 0.25f;
-const float		Analysis::MultipleLetterPenalty = 1.0f;
-const float		Analysis::IncorrectLetterBonus = 0.25f;
 
 Analysis::Analysis( WordList& wordList ):
 	m_wordList( wordList ),
@@ -104,58 +100,6 @@ float Analysis::GetWeightForLetterAtPosition( const CHAR letter, const UINT posi
 	}
 
 	return weight;
-}
-
-float Analysis::RateWord( const Word& guessWord, const Word& testWord ) const
-{
-	float rating = 0.0f;
-	for( UINT letterIndex = 0; letterIndex < Word::WordLength; ++letterIndex )
-	{
-		bool found = false;
-		const CHAR testLetter = testWord.GetLetterAtPosition( letterIndex );
-		const CHAR currentLetter = guessWord.GetLetterAtPosition( letterIndex );
-		if( testLetter == currentLetter )
-		{
-			// Correct letter
-			rating += CorrectLetterScore;
-			found = true;
-		}
-		else
-		{
-			// Not the correct letter - used in another part of the word?
-			for( UINT checkLetter = 0; checkLetter < Word::WordLength; ++checkLetter )
-			{
-				if( checkLetter == letterIndex )
-					continue;
-
-				if( testLetter == currentLetter )
-				{
-					found = true;
-					break;
-				}
-			}
-
-			if( found )
-				rating += WrongPositionScore;
-		}
-
-		if( !found )
-		{
-			// Not being found is also useful as it eliminates letters - award a score for eliminated common letters
-			rating += IncorrectLetterBonus * GetWeightForLetterAtPosition( testLetter, letterIndex );
-		}
-
-		// If this letter already occurs in the test word, it's less useful, so lower the score
-		for( UINT repeatLetterCheckIndex = 0; repeatLetterCheckIndex < letterIndex; ++repeatLetterCheckIndex )
-		{
-			if( guessWord.GetLetterAtPosition( repeatLetterCheckIndex ) == currentLetter )
-			{
-				rating -= MultipleLetterPenalty;
-			}
-		}
-	}
-
-	return rating;
 }
 
 }
