@@ -12,7 +12,7 @@ static HINSTANCE g_instance = NULL;
 static ui::UI* g_userInterface = nullptr;
 static HWND g_dialog = NULL;
 
-INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam );
+INT_PTR WINAPI DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam );
 
 bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 {
@@ -134,7 +134,7 @@ void Shutdown()
 }
 
 // The window proc function for the dialog box
-INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
+INT_PTR WINAPI DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
 	BOOL result = FALSE;
 	switch( message )

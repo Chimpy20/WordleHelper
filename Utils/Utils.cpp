@@ -12,7 +12,7 @@ unsigned int Rand()
 	return( ( randSeed++ * 1103515245u ) + 12345 + time.wMinute * 60 + time.wSecond );
 }
 
-LARGE_INTEGER g_startTime = LARGE_INTEGER(0u);
+LARGE_INTEGER g_startTime{ 0 };
 void StartTimer()
 {
 	QueryPerformanceCounter( &g_startTime );

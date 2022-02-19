@@ -183,7 +183,7 @@ unsigned int strnlen_( const char* str, size_t maxsize )
 char* _strncpy( char* dest, const char* source, size_t count )
 {
 	size_t size = _strnlen_s( source, count );
-	int idx = 0;
+	unsigned int idx = 0;
 	while( ( idx < count ) && ( idx < size ) && ( source[ idx ] != '\0' ) )
 	{
 		dest[ idx ] = source[ idx ];
