@@ -134,8 +134,11 @@ bool UI::OnCommand( const WPARAM wParam, const LPARAM lParam )
 			if( m_letterInfo[ letterIndex ].m_letter != letter[ 0 ] )
 			{
 				m_letterInfo[ letterIndex ].m_letter = letter[ 0 ];
+
+				// Move to the next tabbed control
+				SendMessage( m_dialogHandle, WM_NEXTDLGCTL, 0, FALSE );
 			}
-		}
+		}		
 	}
 
 	for( UINT stateButtonControlIndex = 0; stateButtonControlIndex < wh::Word::WordLength; ++stateButtonControlIndex )
@@ -169,6 +172,10 @@ bool UI::OnCommand( const WPARAM wParam, const LPARAM lParam )
 	return true;
 }
 
+void UI::OnKeyUp( const DWORD keyCode )
+{
+}
+
 // Given an edit control ID, find the letter index
 UINT UI::GetLetterIndexFromEditControlID( const UINT editControlID )
 {
@@ -200,8 +207,19 @@ void UI::RefreshFilterStateButtons()
 }
 
 // When 'guess' has been clicked
-void UI::OnGuess()
+// @return true on success, false otherwise
+bool UI::OnGuess()
 {
+	// Ensure that there are actually letters in the edit control, if not, bail out
+	for( UINT letterIndex = 0; letterIndex < wh::Word::WordLength; ++letterIndex )
+	{
+		if( !utils::IsLetterAlpha( m_letterInfo[ letterIndex ].m_letter ) )
+		{
+			return false;
+		}
+	}
+
+	// Get the letters and filter states in a format the guesser wants
 	CHAR letters[ wh::Word::WordLength ];
 	wh::FilterLetterState letterFilterStates[ wh::Word::WordLength ];
 
@@ -221,6 +239,8 @@ void UI::OnGuess()
 	ClearInputControls();
 
 	UpdateOutoutLog();
+
+	return true;
 }
 
 // Reset the state of the controls to blank

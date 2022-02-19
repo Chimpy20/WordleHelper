@@ -105,6 +105,7 @@ UINT Run()
 {
 	g_userInterface->PostInitialise();
 
+	// The core windows message loop
 	MSG message;
 	while( GetMessage( &message, NULL, 0, 0 ) > 0 )
 	{
@@ -132,6 +133,7 @@ void Shutdown()
 	memory::Heap::Destroy();
 }
 
+// The window proc function for the dialog box
 INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
 	BOOL result = FALSE;
@@ -145,7 +147,6 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 		case WM_COMMAND:
 		{
 			WORD param = LOWORD( wParam );
-			//DEBUG_MESSAGE( "WM_COMMAND wParam = %u, lParam = %u\n", LOWORD( wParam ), lParam );
 			switch( param )
 			{
 				case IDEXIT:
@@ -159,6 +160,9 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 				g_userInterface->OnCommand( wParam, lParam );
 			break;
 		}
+		case WM_KEYUP:
+			g_userInterface->OnKeyUp( LOWORD( wParam ) );
+			break;
 		case WM_CLOSE:
 			EndDialog( g_dialog, 0 );
 			DestroyWindow( g_dialog );

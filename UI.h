@@ -32,8 +32,9 @@ public:
 	void						OnReset();
 
 	bool						OnCommand( const WPARAM wParam, const LPARAM lParam );
+	void						OnKeyUp( const DWORD keyCode );
 
-	void						OnGuess();
+	bool						OnGuess();
 
 private:
 	static const UINT			MessageEditControlMaxChars = 2048;
