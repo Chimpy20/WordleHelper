@@ -1,7 +1,7 @@
 #include "pch.h"
 #include <CommCtrl.h>
-#include "System.h"
-#include "UI.h"
+#include "System\System.h"
+#include "System\UI.h"
 #include "resource.h"
 #include "WordleHelper.h"
 
