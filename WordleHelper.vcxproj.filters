@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{2c951562-2ec8-4082-a071-0d769930bb9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Containers">
+      <UniqueIdentifier>{823ef9ab-5af8-49b7-9b69-995ca4064541}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="System\System.h">
@@ -34,9 +37,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Guesser.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="List.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="MessageLog.h">
@@ -75,6 +75,9 @@
     <ClInclude Include="Utils\Utils.h">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Containers\List.h">
+      <Filter>Source Files\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -90,9 +93,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Word.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="List.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FilterWord.cpp">
@@ -127,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="Utils\Utils.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Containers\List.cpp">
+      <Filter>Source Files\Containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
