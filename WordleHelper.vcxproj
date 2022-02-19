@@ -5,7 +5,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{9e192946-ab2b-4064-ba94-1935962a63db}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>WordleAnalyser</RootNamespace>
+    <RootNamespace>WordleHelper</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>WordleHelper</ProjectName>
   </PropertyGroup>
@@ -192,7 +192,7 @@
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="WordleAnalyser.rc">
+    <ResourceCompile Include="WordleHelper.rc">
       <Culture Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">0x0809</Culture>
     </ResourceCompile>
   </ItemGroup>
