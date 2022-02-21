@@ -7,9 +7,8 @@
 namespace wh
 {
 
-WordList::WordList() :
-	m_analysis(*this),
-	m_guesser(*this)
+WordList::WordList():
+	m_analysis( *this )
 {
 }
 
@@ -146,6 +145,14 @@ UINT WordList::Filter( const FilterWord& filterWord )
 	}
 
 	return static_cast<UINT>( m_wordList.size() );
+}
+
+void WordList::Analyse()
+{
+	if( m_wordList.size() > 0 )
+	{
+		m_analysis.Analyse();
+	}
 }
 
 #ifdef _DEBUG

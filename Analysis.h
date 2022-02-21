@@ -15,7 +15,7 @@ public:
 	static const UINT		NumLetters = 'z' - 'a' + 1;
 	static const UINT		FirstLetterOffset = 'a';
 
-	Analysis( WordList&		wordList );
+	Analysis( WordList&	wordList );
 
 	void					Analyse();
 

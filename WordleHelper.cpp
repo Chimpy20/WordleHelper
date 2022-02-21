@@ -8,6 +8,7 @@ namespace wh
 WordleHelper::WordleHelper():
 	m_masterWordList( nullptr ),
 	m_filteredWords( nullptr ),
+	m_analysis(
 	m_messageLog( nullptr )
 {
 }
@@ -72,6 +73,7 @@ void WordleHelper::Guess()
 		io::FormatString( infoMessage, MessageMaxLength, "There are %u words possible\r\n", wordListToUseForGuess->GetNumWords() );
 
 		// Do the guess
+		m_filteredWords->Analyse();
 		const containers::List<RatedWord>& ratedWordList = m_filteredWords->Guess( *wordListToUseForGuess );
 
 		// Output the results

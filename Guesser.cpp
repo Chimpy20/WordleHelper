@@ -20,7 +20,7 @@ Guesser::Guesser( const WordList& wordList ) :
 // and how likely they are to elimiate other words
 // @param masterWordList: The list of all N-letter words, one of which will be the solution
 // @param analysis: The analysis object used to help weight some letters
-void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
+void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis, const float proportionTotalWordsRemaining )
 {
 	utils::StartTimer();
 

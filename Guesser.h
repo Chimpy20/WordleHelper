@@ -22,7 +22,7 @@ public:
 
 	// @param masterWordList: The list of all N-letter words
 	// @param analysis: The analysis object used to help weight some letters
-	void						Guess( const WordList& masterWordList, const Analysis& analysis );
+	void						Guess( const WordList& masterWordList, const Analysis& analysis, const float proportionTotalWordsRemaining );
 	float						RateWord( const Word& guessWord, const Word& testWord, const Analysis& analysis ) const;
 
 	const containers::List<RatedWord>& GetRatedWordList() const
