@@ -69,6 +69,9 @@
     <ClInclude Include="MessageLog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Containers\Vector.h">
+      <Filter>Source Files\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

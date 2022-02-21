@@ -136,8 +136,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Analysis.h" />
-    <ClInclude Include="List.h" />
-    <ClInclude Include="Debug.h" />
+    <ClInclude Include="Containers\List.h" />
+    <ClInclude Include="Containers\Vector.h" />
     <ClInclude Include="FilterWord.h" />
     <ClInclude Include="Guesser.h" />
     <ClInclude Include="IO.h" />
@@ -156,7 +156,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Analysis.cpp" />
-    <ClCompile Include="List.cpp" />
     <ClCompile Include="FilterWord.cpp" />
     <ClCompile Include="Guesser.cpp" />
     <ClCompile Include="IO.cpp" />

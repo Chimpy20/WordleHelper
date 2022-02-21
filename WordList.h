@@ -1,6 +1,7 @@
 #pragma once
 
-#include "List.h"
+#include "Containers\List.h"
+#include "Containers\Vector.h"
 #include "FilterWord.h"
 #include "Analysis.h"
 #include "Guesser.h"
