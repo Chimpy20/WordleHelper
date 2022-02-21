@@ -6,6 +6,11 @@
 namespace wh
 {
 
+const float		Guesser::CorrectLetterScore = 0.50f;
+const float		Guesser::WrongPositionScore = 0.25f;
+const float		Guesser::MultipleLetterPenalty = 1.0f;
+const float		Guesser::IncorrectLetterBonus = 0.25f;
+
 Guesser::Guesser( const WordList& wordList ) :
 	m_wordList( wordList )
 {
@@ -15,7 +20,7 @@ Guesser::Guesser( const WordList& wordList ) :
 // and how likely they are to elimiate other words
 // @param masterWordList: The list of all N-letter words, one of which will be the solution
 // @param analysis: The analysis object used to help weight some letters
-void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
+void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis, const float proportionTotalWordsRemaining )
 {
 	utils::StartTimer();
 
@@ -51,13 +56,10 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 			const Word& checkWord = *listItor;
 			if( word != checkWord )
 			{
-				rating += analysis.RateWord( word, checkWord );
+				rating += RateWord( word, checkWord, analysis );
 			}
 			++listItor;
 		}
-
-		/*if( rating < 0.0f )
-			rating = 0.0f;*/
 
 		// Normalise the rating
 		rating /= masterWordsDivisor;
@@ -74,6 +76,64 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis )
 	utils::EndTimer( "Guess" );
 }
 
+// For a given word that has been a guess, take a word from the list of word provided to the guesser, and 
+// award the word from the list a score based on how close tyhe guess is based on the states of the guessed letters
+// @param guessWord the word that is the users guess
+// @param testWord the word from the list of words
+// @param analysis the analysis object
+float Guesser::RateWord( const Word& guessWord, const Word& testWord, const Analysis& analysis ) const
+{
+	float rating = 0.0f;
+	for( UINT letterIndex = 0; letterIndex < Word::WordLength; ++letterIndex )
+	{
+		bool found = false;
+		const CHAR testLetter = testWord.GetLetterAtPosition( letterIndex );
+		const CHAR currentLetter = guessWord.GetLetterAtPosition( letterIndex );
+		if( testLetter == currentLetter )
+		{
+			// Correct letter
+			rating += CorrectLetterScore;
+			found = true;
+		}
+		else
+		{
+			// Not the correct letter - used in another part of the word?
+			for( UINT checkLetter = 0; checkLetter < Word::WordLength; ++checkLetter )
+			{
+				if( checkLetter == letterIndex )
+					continue;
+
+				if( testLetter == currentLetter )
+				{
+					found = true;
+					break;
+				}
+			}
+
+			if( found )
+				rating += WrongPositionScore;
+		}
+
+		if( !found )
+		{
+			// Not being found is also useful as it eliminates letters - award a score for eliminated common letters
+			rating += IncorrectLetterBonus * analysis.GetWeightForLetterAtPosition( testLetter, letterIndex );
+		}
+
+		// If this letter already occurs in the test word, it's less useful, so lower the score
+		for( UINT repeatLetterCheckIndex = 0; repeatLetterCheckIndex < letterIndex; ++repeatLetterCheckIndex )
+		{
+			if( guessWord.GetLetterAtPosition( repeatLetterCheckIndex ) == currentLetter )
+			{
+				rating -= MultipleLetterPenalty;
+			}
+		}
+	}
+
+	return rating;
+}
+
+// Clear the list of rated words
 void Guesser::Reset()
 {
 	m_ratedWordList.clear();

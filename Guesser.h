@@ -1,6 +1,6 @@
 #pragma once
 
-#include "List.h"
+#include "Containers\List.h"
 #include "RatedWord.h"
 
 namespace wh
@@ -22,7 +22,8 @@ public:
 
 	// @param masterWordList: The list of all N-letter words
 	// @param analysis: The analysis object used to help weight some letters
-	void						Guess( const WordList& masterWordList, const Analysis& analysis );
+	void						Guess( const WordList& masterWordList, const Analysis& analysis, const float proportionTotalWordsRemaining );
+	float						RateWord( const Word& guessWord, const Word& testWord, const Analysis& analysis ) const;
 
 	const containers::List<RatedWord>& GetRatedWordList() const
 	{
@@ -32,6 +33,11 @@ public:
 	void						Reset();
 
 private:
+	static const float			CorrectLetterScore;
+	static const float			WrongPositionScore;
+	static const float			MultipleLetterPenalty;
+	static const float			IncorrectLetterBonus;
+
 	const WordList&				m_wordList; // The (possibly filtered down) list of words, one of which is the solution
 	containers::List<RatedWord>	m_ratedWordList; // Filled in with rated words, sorted by suitability
 };

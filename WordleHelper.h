@@ -29,9 +29,20 @@ public:
 private:
 	static const UINT	MessageMaxLength = 128;
 
-	// The list of all possible solutions
+	// The number of results at which only words that could be
+	// solutions are used
+	static const UINT	MatchThreshold = 64;
+
+	// The list of all known N-letter words
 	WordList*			m_masterWordList;
+
+	// The reduced list of words that could be solutions
 	WordList*			m_filteredWords;
+
+	// Performs a guess for possible solutions
+	Guesser				m_guesser;
+
+	// The message log
 	MessageLog*			m_messageLog;
 };
 

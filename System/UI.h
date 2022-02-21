@@ -29,11 +29,12 @@ public:
 	void						UnlinkHelper();
 	void						Shutdown();
 
-	void						Reset();
+	void						OnReset();
 
 	bool						OnCommand( const WPARAM wParam, const LPARAM lParam );
+	void						OnKeyUp( const DWORD keyCode );
 
-	void						Guess();
+	bool						OnGuess();
 
 private:
 	static const UINT			MessageEditControlMaxChars = 2048;

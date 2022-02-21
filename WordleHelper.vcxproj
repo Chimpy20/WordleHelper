@@ -5,7 +5,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{9e192946-ab2b-4064-ba94-1935962a63db}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>WordleAnalyser</RootNamespace>
+    <RootNamespace>WordleHelper</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>WordleHelper</ProjectName>
   </PropertyGroup>
@@ -60,9 +60,24 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <OutDir>$(ProjectDir)</OutDir>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)</OutDir>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(ProjectDir)</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(ProjectDir)</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -106,6 +121,9 @@
     <ClCompile>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ComCtl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
@@ -132,47 +150,51 @@
       <EntryPointSymbol Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </EntryPointSymbol>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ComCtl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ComCtl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Analysis.h" />
     <ClInclude Include="Containers\List.h" />
-    <ClInclude Include="Containers\Vector.h" />
     <ClInclude Include="FilterWord.h" />
     <ClInclude Include="Guesser.h" />
-    <ClInclude Include="IO.h" />
-    <ClInclude Include="Memory.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="printf.h" />
     <ClInclude Include="RatedWord.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="System.h" />
     <ClInclude Include="MessageLog.h" />
-    <ClInclude Include="UI.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="System\Memory.h" />
+    <ClInclude Include="System\System.h" />
+    <ClInclude Include="System\UI.h" />
+    <ClInclude Include="Utils\Debug.h" />
+    <ClInclude Include="Utils\IO.h" />
+    <ClInclude Include="Utils\printf.h" />
+    <ClInclude Include="Utils\Utils.h" />
     <ClInclude Include="Word.h" />
     <ClInclude Include="WordleHelper.h" />
     <ClInclude Include="WordList.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Analysis.cpp" />
+    <ClCompile Include="Containers\List.cpp" />
     <ClCompile Include="FilterWord.cpp" />
     <ClCompile Include="Guesser.cpp" />
-    <ClCompile Include="IO.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Memory.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="printf.c">
+    <ClCompile Include="RatedWord.cpp" />
+    <ClCompile Include="MessageLog.cpp" />
+    <ClCompile Include="System\Memory.cpp" />
+    <ClCompile Include="System\System.cpp" />
+    <ClCompile Include="System\UI.cpp" />
+    <ClCompile Include="Utils\IO.cpp" />
+    <ClCompile Include="Utils\printf.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="RatedWord.cpp" />
-    <ClCompile Include="System.cpp" />
-    <ClCompile Include="MessageLog.cpp" />
-    <ClCompile Include="UI.cpp" />
-    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="Utils\Utils.cpp" />
     <ClCompile Include="Word.cpp" />
     <ClCompile Include="WordleHelper.cpp" />
     <ClCompile Include="WordList.cpp" />
@@ -182,12 +204,13 @@
     <Text Include="readme.txt">
       <DeploymentContent>false</DeploymentContent>
     </Text>
+    <Text Include="wordlist.txt" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="WordleAnalyser.rc">
+    <ResourceCompile Include="WordleHelper.rc">
       <Culture Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">0x0809</Culture>
     </ResourceCompile>
   </ItemGroup>

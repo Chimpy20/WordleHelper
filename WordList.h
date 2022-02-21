@@ -4,13 +4,9 @@
 #include "Containers\Vector.h"
 #include "FilterWord.h"
 #include "Analysis.h"
-#include "Guesser.h"
 
 namespace wh
 {
-
-class Analysis;
-class Guesser;
 
 // An object that maintains a list of words and associated functionality
 class WordList
@@ -35,11 +31,6 @@ public:
 		return m_analysis;
 	}
 
-	const Guesser&			GetGuesser() const
-	{
-		return m_guesser;
-	}
-
 	// Reads words from a file on disk
 	// @param append: set true to add words to the existing list, false to clear the list first
 	// @return the number of words read from disk
@@ -55,6 +46,8 @@ public:
 	// Use a filter (guess) to reduce the number of possible solution words down
 	// @return the number of reduced words remaining
 	UINT					Filter( const FilterWord& filterWord );
+
+	void					Analyse();
 
 	// Use the guesser object to produce a list of weighted words which may be solutions
 	// @param masterWordList: the complete list of words - not the filtered down ones
@@ -74,7 +67,6 @@ private:
 
 	WordListContainer		m_wordList; // The container of the words
 	Analysis				m_analysis; // Analysis object for these words
-	Guesser					m_guesser; // Performs a guess for possible solutions
 };
 
 } // namespace wh

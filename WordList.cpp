@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "System.h"
+#include "System\System.h"
 #include "WordList.h"
 #include "Word.h"
 #include "Analysis.h"
@@ -7,9 +7,8 @@
 namespace wh
 {
 
-WordList::WordList() :
-	m_analysis(*this),
-	m_guesser(*this)
+WordList::WordList():
+	m_analysis( *this )
 {
 }
 
@@ -23,7 +22,7 @@ UINT WordList::ReadWords( const INT wordListResourceID, bool append )
 	UINT numWordsRead = 0;
 	UINT fileSize = 0;
 	const CHAR* textFileBytes = system::OpenTextFile( wordListResourceID, fileSize );
-	CHAR* wordListRaw = (CHAR*)memory::Heap::Alloc( fileSize );
+	CHAR* wordListRaw = (CHAR*)system::memory::Heap::Alloc( fileSize );
 	
 	// Clear the list before if we're not appending
 	if( !append )
@@ -35,7 +34,7 @@ UINT WordList::ReadWords( const INT wordListResourceID, bool append )
 
 	if( wordListRaw != nullptr )
 	{
-		memory::Heap::Free( wordListRaw );
+		system::memory::Heap::Free( wordListRaw );
 	}
 
 	system::CloseTextFile( wordListResourceID );
@@ -146,6 +145,14 @@ UINT WordList::Filter( const FilterWord& filterWord )
 	}
 
 	return static_cast<UINT>( m_wordList.size() );
+}
+
+void WordList::Analyse()
+{
+	if( m_wordList.size() > 0 )
+	{
+		m_analysis.Analyse();
+	}
 }
 
 #ifdef _DEBUG

@@ -13,61 +13,70 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\System">
+      <UniqueIdentifier>{fe9e4c06-0623-4bfa-993e-ec4714829f96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{2c951562-2ec8-4082-a071-0d769930bb9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Containers">
+      <UniqueIdentifier>{823ef9ab-5af8-49b7-9b69-995ca4064541}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="System\System.h">
+      <Filter>Source Files\System</Filter>
     </ClInclude>
-    <ClInclude Include="WordleHelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WordList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IO.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="printf.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Word.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="List.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Memory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FilterWord.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="System\UI.h">
+      <Filter>Source Files\System</Filter>
     </ClInclude>
     <ClInclude Include="Analysis.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterWord.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Guesser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RatedWord.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="System.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="MessageLog.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RatedWord.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Word.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WordleHelper.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WordList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Memory.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Debug.h">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\IO.h">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\printf.h">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Utils.h">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Containers\List.h">
+      <Filter>Source Files\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Containers\Vector.h">
       <Filter>Source Files\Containers</Filter>
@@ -86,19 +95,7 @@
     <ClCompile Include="WordList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IO.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="printf.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Word.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="List.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Memory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FilterWord.cpp">
@@ -113,17 +110,29 @@
     <ClCompile Include="RatedWord.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="System.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MessageLog.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\System.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\UI.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Memory.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\IO.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\printf.c">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Utils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Containers\List.cpp">
+      <Filter>Source Files\Containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,12 +140,15 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />
+    <Text Include="wordlist.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="WordleAnalyser.rc">
+    <ResourceCompile Include="WordleHelper.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

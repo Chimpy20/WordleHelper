@@ -183,7 +183,7 @@ unsigned int strnlen_( const char* str, size_t maxsize )
 char* _strncpy( char* dest, const char* source, size_t count )
 {
 	size_t size = _strnlen_s( source, count );
-	int idx = 0;
+	unsigned int idx = 0;
 	while( ( idx < count ) && ( idx < size ) && ( source[ idx ] != '\0' ) )
 	{
 		dest[ idx ] = source[ idx ];
@@ -515,7 +515,7 @@ static size_t _etoa(out_fct_type out, char* buffer, size_t idx, size_t maxlen, d
   exp2 = (int)(expval * 3.321928094887362 + 0.5);
   const double z  = expval * 2.302585092994046 - exp2 * 0.6931471805599453;
   const double z2 = z * z;
-  conv.U = (uint64_t)(exp2 + 1023) << 52U;
+  conv.U = ((uint64_t)(exp2) + 1023 ) << 52U;
   // compute exp(z) using continued fractions, see https://en.wikipedia.org/wiki/Exponential_function#Continued_fractions_for_ex
   conv.F *= 1 + 2 * z / (2 - z + (z2 / (6 + (z2 / (10 + z2 / 14)))));
   // correct for rounding errors

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include <CommCtrl.h>
-#include "System.h"
-#include "UI.h"
+#include "System\System.h"
+#include "System\UI.h"
 #include "resource.h"
 #include "WordleHelper.h"
 
@@ -12,7 +12,7 @@ static HINSTANCE g_instance = NULL;
 static ui::UI* g_userInterface = nullptr;
 static HWND g_dialog = NULL;
 
-INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam );
+INT_PTR WINAPI DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam );
 
 bool Initialise( HINSTANCE instance, LPSTR cmdLine, int cmdShow )
 {
@@ -105,6 +105,7 @@ UINT Run()
 {
 	g_userInterface->PostInitialise();
 
+	// The core windows message loop
 	MSG message;
 	while( GetMessage( &message, NULL, 0, 0 ) > 0 )
 	{
@@ -132,7 +133,8 @@ void Shutdown()
 	memory::Heap::Destroy();
 }
 
-INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
+// The window proc function for the dialog box
+INT_PTR WINAPI DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
 	BOOL result = FALSE;
 	switch( message )
@@ -145,7 +147,6 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 		case WM_COMMAND:
 		{
 			WORD param = LOWORD( wParam );
-			//DEBUG_MESSAGE( "WM_COMMAND wParam = %u, lParam = %u\n", LOWORD( wParam ), lParam );
 			switch( param )
 			{
 				case IDEXIT:
@@ -159,6 +160,9 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 				g_userInterface->OnCommand( wParam, lParam );
 			break;
 		}
+		case WM_KEYUP:
+			g_userInterface->OnKeyUp( LOWORD( wParam ) );
+			break;
 		case WM_CLOSE:
 			EndDialog( g_dialog, 0 );
 			DestroyWindow( g_dialog );
@@ -179,7 +183,7 @@ INT_PTR DlgProc( HWND wnd, UINT message, WPARAM wParam, LPARAM lParam )
 #ifdef __cplusplus
 extern "C"
 {
-	#pragma function(memset)
+/*	#pragma function(memset)
 	void* __cdecl memset( _Out_writes_bytes_all_( count ) void* dest, _In_ int value, _In_ size_t count )
 	{
 		char* bytes = (char*)dest;
@@ -188,7 +192,7 @@ extern "C"
 			*bytes++ = (char)value;
 		}
 		return dest;
-	}
+	}*/
 
 	int _fltused = 0;
 }

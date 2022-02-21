@@ -1,5 +1,7 @@
 #pragma once
 
+namespace system
+{
 namespace memory
 {
 
@@ -9,7 +11,7 @@ public:
 	static bool		Create();
 	static void		Destroy();
 
-	static void*	Alloc( size_t size );
+	static void* Alloc( size_t size );
 	static void		Free( void* p );
 
 private:
@@ -18,6 +20,7 @@ private:
 };
 
 } // namespace memory
+} // namespace system
 
 void* operator new( size_t size );
 void* operator new[]( size_t size );
