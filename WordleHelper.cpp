@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "WordleHelper.h"
 #include "FilterWord.h"
+#include "Guesser.h"
 
 namespace wh
 {
 
-WordleHelper::WordleHelper():
+WordleHelper::WordleHelper() :
 	m_masterWordList( nullptr ),
 	m_filteredWords( nullptr ),
-	m_analysis(
 	m_messageLog( nullptr )
 {
 }
@@ -66,15 +66,20 @@ UINT WordleHelper::Filter( const FilterWord& filterWord )
 // Provide some next guesses based on the current possible solutions
 void WordleHelper::Guess()
 {
-	const WordList* const wordListToUseForGuess = ( m_filteredWords->GetNumWords() > MatchThreshold ) ? m_masterWordList : m_filteredWords;
+	const WordList* const wordListToUseForGuess = m_filteredWords;
+	ASSERT( wordListToUseForGuess != nullptr, "WordleHelper::Guess(): Couldn't get a list of words\n" );
 	if( wordListToUseForGuess->GetNumWords() > 0 )
 	{
 		CHAR infoMessage[ MessageMaxLength ];
 		io::FormatString( infoMessage, MessageMaxLength, "There are %u words possible\r\n", wordListToUseForGuess->GetNumWords() );
 
+		Guesser guesser;
+
 		// Do the guess
 		m_filteredWords->Analyse();
-		const containers::List<RatedWord>& ratedWordList = m_filteredWords->Guess( *wordListToUseForGuess );
+		const float proportionWordsRemaining = static_cast<float>( m_filteredWords->GetNumWords() ) / static_cast<float>( m_masterWordList->GetNumWords() );
+
+		const containers::List<RatedWord>& ratedWordList = guesser.Guess( *m_filteredWords, *wordListToUseForGuess, proportionWordsRemaining );
 
 		// Output the results
 		CHAR guessMessage[ MessageMaxLength ];

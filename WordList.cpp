@@ -169,15 +169,4 @@ void WordList::OutputWords() const
 }
 #endif // _DEBUG
 
-const containers::List<RatedWord>& WordList::Guess( const WordList& masterWordList )
-{
-	m_guesser.Reset();
-	if( m_wordList.size() > 0 )
-	{
-		m_analysis.Analyse();
-		m_guesser.Guess( masterWordList, m_analysis );
-	}
-	return m_guesser.GetRatedWordList();
-}
-
 }

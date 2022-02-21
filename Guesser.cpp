@@ -9,31 +9,34 @@ namespace wh
 const float		Guesser::CorrectLetterScore = 0.50f;
 const float		Guesser::WrongPositionScore = 0.25f;
 const float		Guesser::MultipleLetterPenalty = 1.0f;
-const float		Guesser::IncorrectLetterBonus = 0.25f;
+const float		Guesser::IncorrectLetterBonus = 0.50f;
+const float		Guesser::IncorrectLetterBonusMultiplier = 4.0f;
 
-Guesser::Guesser( const WordList& wordList ) :
-	m_wordList( wordList )
+Guesser::Guesser()
 {
 }
 
 // Produces a list of words sorted by a "rating" or "score" based on how common the letters in the word are
 // and how likely they are to elimiate other words
-// @param masterWordList: The list of all N-letter words, one of which will be the solution
-// @param analysis: The analysis object used to help weight some letters
-void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis, const float proportionTotalWordsRemaining )
+// @param filteredWordList: The list of words remaining that could be the solution
+// @param masterWordList: The list of all N-letter words
+// @param proportionTotalWordsRemaining: How many words are remaining after the unviable ones have been eliminated
+const containers::List<RatedWord>& Guesser::Guess( const WordList& filteredWordList, const WordList& masterWordList, const float proportionTotalWordsRemaining )
 {
 	utils::StartTimer();
+
+	const Analysis& analysis = filteredWordList.GetAnalysis();
 
 	// Clear the resultant list is case this is not the first time of running
 	m_ratedWordList.clear();
 
-	const WordListContainer& wordListContainer = m_wordList.GetWordList();
+	const WordListContainer& wordListContainer = filteredWordList.GetWordList();
 	const WordListContainer& masterWordListContainer = masterWordList.GetWordList();
 
 	ASSERT( wordListContainer.size() > 0, "There are no words in the word list the guesser is using\n" );
 	ASSERT( masterWordListContainer.size() >= 1, "Too few words in master list\n" );
 	if( masterWordListContainer.size() == 0 )
-		return;
+		return m_ratedWordList;
 
 	const float masterWordsDivisor = static_cast<float>( masterWordListContainer.size() );
 
@@ -56,7 +59,7 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis, c
 			const Word& checkWord = *listItor;
 			if( word != checkWord )
 			{
-				rating += RateWord( word, checkWord, analysis );
+				rating += RateWord( word, checkWord, analysis, proportionTotalWordsRemaining );
 			}
 			++listItor;
 		}
@@ -74,6 +77,8 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis, c
 	m_ratedWordList.sort();
 
 	utils::EndTimer( "Guess" );
+
+	return m_ratedWordList;
 }
 
 // For a given word that has been a guess, take a word from the list of word provided to the guesser, and 
@@ -81,7 +86,7 @@ void Guesser::Guess( const WordList& masterWordList, const Analysis& analysis, c
 // @param guessWord the word that is the users guess
 // @param testWord the word from the list of words
 // @param analysis the analysis object
-float Guesser::RateWord( const Word& guessWord, const Word& testWord, const Analysis& analysis ) const
+float Guesser::RateWord( const Word& guessWord, const Word& testWord, const Analysis& analysis, const float proportionTotalWordsRemaining ) const
 {
 	float rating = 0.0f;
 	for( UINT letterIndex = 0; letterIndex < Word::WordLength; ++letterIndex )
@@ -117,7 +122,13 @@ float Guesser::RateWord( const Word& guessWord, const Word& testWord, const Anal
 		if( !found )
 		{
 			// Not being found is also useful as it eliminates letters - award a score for eliminated common letters
-			rating += IncorrectLetterBonus * analysis.GetWeightForLetterAtPosition( testLetter, letterIndex );
+
+			// Cap the factor used to multiply the incorrect letter bonus
+			float incorrectLetterBonusMultiplier = proportionTotalWordsRemaining * IncorrectLetterBonusMultiplier;
+			if( incorrectLetterBonusMultiplier > 1.0f )
+				incorrectLetterBonusMultiplier = 1.0f;
+
+			rating += ( IncorrectLetterBonus * analysis.GetWeightForLetterAtPosition( testLetter, letterIndex ) * incorrectLetterBonusMultiplier);
 		}
 
 		// If this letter already occurs in the test word, it's less useful, so lower the score

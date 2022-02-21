@@ -17,6 +17,9 @@ public:
 private:
 	static HANDLE	sm_heap;
 	static UINT64	sm_heapAllocationsTotal;
+#ifdef _DEBUG
+	static UINT64	sm_maxHeap;
+#endif
 };
 
 } // namespace memory

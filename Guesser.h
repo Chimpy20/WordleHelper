@@ -18,12 +18,12 @@ class Guesser
 public:
 	typedef containers::List<Word> WordListContainer;
 
-	Guesser( const WordList& wordList );
+	Guesser();
+	~Guesser(){}
 
-	// @param masterWordList: The list of all N-letter words
-	// @param analysis: The analysis object used to help weight some letters
-	void						Guess( const WordList& masterWordList, const Analysis& analysis, const float proportionTotalWordsRemaining );
-	float						RateWord( const Word& guessWord, const Word& testWord, const Analysis& analysis ) const;
+	const containers::List<RatedWord>& Guess( const WordList& filteredWordList, const WordList& masterWordList, const float proportionTotalWordsRemaining );
+
+	float						RateWord( const Word& guessWord, const Word& testWord, const Analysis& analysis, const float proportionTotalWordsRemaining ) const;
 
 	const containers::List<RatedWord>& GetRatedWordList() const
 	{
@@ -37,8 +37,8 @@ private:
 	static const float			WrongPositionScore;
 	static const float			MultipleLetterPenalty;
 	static const float			IncorrectLetterBonus;
+	static const float			IncorrectLetterBonusMultiplier;
 
-	const WordList&				m_wordList; // The (possibly filtered down) list of words, one of which is the solution
 	containers::List<RatedWord>	m_ratedWordList; // Filled in with rated words, sorted by suitability
 };
 
