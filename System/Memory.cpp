@@ -17,7 +17,9 @@ bool Heap::Create()
 {
 	sm_heap = HeapCreate( 0, 0, 0 );
 	sm_heapAllocationsTotal = 0;
+#ifdef _DEBUG
 	sm_maxHeap = 0;
+#endif
 	return( sm_heap != INVALID_HANDLE_VALUE );
 }
 
