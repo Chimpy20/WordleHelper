@@ -9,7 +9,7 @@ namespace wh
 const float		Guesser::CorrectLetterScore = 0.50f;
 const float		Guesser::WrongPositionScore = 0.25f;
 const float		Guesser::MultipleLetterPenalty = 1.0f;
-const float		Guesser::IncorrectLetterBonus = 0.50f;
+const float		Guesser::IncorrectLetterBonus = 0.28f;
 const float		Guesser::IncorrectLetterBonusMultiplier = 4.0f;
 
 Guesser::Guesser()
@@ -86,6 +86,7 @@ const containers::List<RatedWord>& Guesser::Guess( const WordList& filteredWordL
 // @param guessWord the word that is the users guess
 // @param testWord the word from the list of words
 // @param analysis the analysis object
+// @param proportionTotalWordsRemaining what fraction 0.0-1.0 of words are left from the original list of starting words
 float Guesser::RateWord( const Word& guessWord, const Word& testWord, const Analysis& analysis, const float proportionTotalWordsRemaining ) const
 {
 	float rating = 0.0f;
@@ -124,6 +125,9 @@ float Guesser::RateWord( const Word& guessWord, const Word& testWord, const Anal
 			// Not being found is also useful as it eliminates letters - award a score for eliminated common letters
 
 			// Cap the factor used to multiply the incorrect letter bonus
+			// Why do we multiply here? Typically, a player will reduce the number of viable words down to about a 
+			// quarter in the first guess. We still want to award incorrect, but commonly used letters, on the 2nd guess.
+			// This "boost" adds more weight for second guesses (or futher guesses if the player is really bad!)
 			float incorrectLetterBonusMultiplier = proportionTotalWordsRemaining * IncorrectLetterBonusMultiplier;
 			if( incorrectLetterBonusMultiplier > 1.0f )
 				incorrectLetterBonusMultiplier = 1.0f;

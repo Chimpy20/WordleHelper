@@ -1,9 +1,7 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by WordleAnalyser.rc
-
-#define TEXTFILE        256
-
+// Used by WordleHelper.rc
+//
 #define IDEXIT                          3
 #define IDB_RESET                       4
 #define IDB_RESET2                      5
@@ -16,6 +14,7 @@
 #define IDB_BLOCKGREEN                  109
 #define IDB_BLOCKYELLOW                 110
 #define IDB_BLOCKGREY                   111
+#define TEXTFILE                        256
 #define IDC_EDIT1                       1001
 #define IDC_OUTPUT                      1001
 #define IDC_LETTER0                     1002
@@ -25,8 +24,7 @@
 #define IDC_LETTER4                     1006
 #define IDC_GUESS                       1007
 #define IDB_GUESS                       1007
-
-#define IDR_PRIMARYWORDLIST				2000
+#define IDR_PRIMARYWORDLIST             2000
 
 // Next default values for new objects
 // 

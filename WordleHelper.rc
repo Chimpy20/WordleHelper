@@ -50,7 +50,7 @@ END
 // Dialog
 //
 
-IDD_DIALOG1 DIALOGEX 0, 0, 311, 223
+IDD_DIALOG1 DIALOGEX 0, 0, 311, 236
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
 CAPTION "Wordle Helper"
@@ -68,10 +68,10 @@ BEGIN
     PUSHBUTTON      "Letter",IDB_FILTERSTATE4,83,48,14,14,BS_BITMAP | BS_FLAT
     PUSHBUTTON      "Guess",IDB_GUESS,192,58,54,14,BS_FLAT
     PUSHBUTTON      "Reset",IDB_RESET,254,58,50,14,BS_FLAT
-    EDITTEXT        IDC_OUTPUT,7,77,297,119,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL | NOT WS_TABSTOP
-    DEFPUSHBUTTON   "OK",IDOK,107,202,50,14,NOT WS_VISIBLE
-    PUSHBUTTON      "Cancel",IDCANCEL,165,202,50,14,NOT WS_VISIBLE
-    PUSHBUTTON      "Exit",IDEXIT,254,202,50,14,BS_FLAT
+    EDITTEXT        IDC_OUTPUT,7,77,297,129,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL | NOT WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,107,215,50,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Cancel",IDCANCEL,165,215,50,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Exit",IDEXIT,254,215,50,14,BS_FLAT
     LTEXT           "Your guess:",IDC_STATIC,7,6,59,10
     LTEXT           "Which letters wordle says are correct, or wrong position (click them to change):",IDC_STATIC,7,35,297,10
 END
@@ -90,7 +90,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 304
         TOPMARGIN, 6
-        BOTTOMMARGIN, 216
+        BOTTOMMARGIN, 229
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -128,10 +128,17 @@ IDB_BLOCKYELLOW         BITMAP                  "Yellow.bmp"
 
 IDB_BLOCKGREY           BITMAP                  "Grey.bmp"
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 256
+//
+
+IDR_PRIMARYWORDLIST     256                     "wordlist.txt"
+
 #endif    // English (United Kingdom) resources
 /////////////////////////////////////////////////////////////////////////////
 
-IDR_PRIMARYWORDLIST TEXTFILE "wordlist.txt"
 
 
 #ifndef APSTUDIO_INVOKED

@@ -126,19 +126,31 @@ bool UI::OnCommand( const WPARAM wParam, const LPARAM lParam )
 	if( HIWORD( wParam ) == EN_CHANGE )
 	{
 		UINT editControlID = LOWORD( wParam );
+		
+		const UINT letterIndex = GetLetterIndexFromEditControlID( editControlID );
 
-		CHAR letter[ 2 ] = { 0 };
-		if( GetDlgItemText( m_dialogHandle, editControlID, letter, 2 ) != 0 )
+		CHAR letterText[ 2 ] = { 0 };
+		if( GetDlgItemText( m_dialogHandle, editControlID, letterText, 2 ) != 0 )
 		{
-			const UINT letterIndex = GetLetterIndexFromEditControlID( editControlID );
-			if( m_letterInfo[ letterIndex ].m_letter != letter[ 0 ] )
+			const CHAR letter = letterText[ 0 ];
+			if( m_letterInfo[ letterIndex ].m_letter != letter )
 			{
-				m_letterInfo[ letterIndex ].m_letter = letter[ 0 ];
+				m_letterInfo[ letterIndex ].m_letter = letter;
 
 				// Move to the next tabbed control
 				SendMessage( m_dialogHandle, WM_NEXTDLGCTL, 0, FALSE );
 			}
-		}		
+		}
+		else
+		{
+			m_letterInfo[ letterIndex ].m_letter = '\0';
+
+			// Move to the previous tabbed control unless it's the first letter
+			if( letterIndex != 0 )
+			{
+				SendMessage( m_dialogHandle, WM_NEXTDLGCTL, 1, FALSE );
+			}
+		}
 	}
 
 	for( UINT stateButtonControlIndex = 0; stateButtonControlIndex < wh::Word::WordLength; ++stateButtonControlIndex )
